@@ -59,6 +59,8 @@ void TabGroup::delTab(WidgetPtr tab) {
 }
 
 size_t TabGroup::getTabIndex(WidgetPtr tab) {
+    // FIXME
+    /*
     size_t cnt = lv_tabview_get_tab_count(obj());
     for (size_t i = 0; i < cnt; i++) {
         lv_obj_t *cur = lv_tabview_get_tab(obj(), i);
@@ -66,15 +68,20 @@ size_t TabGroup::getTabIndex(WidgetPtr tab) {
             return i;
         }
     }
+    */
     throw std::runtime_error("Tab not part of tab group");
 }
 
 void TabGroup::setActiveTab(size_t i) {
-    lv_tabview_set_tab_act(obj(), i, true);
+    // FIXME
+    //lv_tabview_set_tab_act(obj(), i, true);
 }
 
 size_t TabGroup::getActiveTab() {
-    return lv_tabview_get_tab_act(obj());
+    // FIXME
+    //return lv_tabview_get_tab_act(obj());
+    size_t a = 0;
+    return a;
 }
 
 size_t TabGroup::getTabCount() {
@@ -82,6 +89,8 @@ size_t TabGroup::getTabCount() {
 }
 
 void TabGroup::removeTab(size_t i) {
+    // FIXME
+    /*
     lv_tabview_ext_t *ext = reinterpret_cast<lv_tabview_ext_t *>(lv_obj_get_ext_attr(obj()));
 
     if (ext->tab_cnt <= 1) {
@@ -102,7 +111,6 @@ void TabGroup::removeTab(size_t i) {
 
     lv_obj_t *page = lv_tabview_get_tab(obj(), i);
     lv_obj_del(page);
-/*
     const lv_style_t * style_tabs = lv_obj_get_style(ext->btns);
     lv_coord_t indic_size = (lv_obj_get_width(obj()) - style_tabs->body.padding.inner * (ext->tab_cnt - 1) -
                  style_tabs->body.padding.left - style_tabs->body.padding.right) /
@@ -114,6 +122,7 @@ void TabGroup::removeTab(size_t i) {
     lv_tabview_set_btns_hidden(obj(), false);
     setActiveTab(ext->tab_cnt - 1);
     lv_obj_invalidate(obj());
+    */
 }
 
 void TabGroup::clear() {
