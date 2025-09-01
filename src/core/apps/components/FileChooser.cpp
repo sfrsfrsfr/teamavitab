@@ -47,7 +47,7 @@ void FileChooser::show(std::shared_ptr<Container> parent) {
         }
     });
     list = std::make_shared<List>(window);
-    list->setDimensions(window->getContentWidth(), window->getContentHeight());
+//    list->setDimensions(window->getContentWidth(), window->getContentHeight());
     list->centerInParent();
     list->setCallback([this] (int data) {
         api->executeLater([this, data] {

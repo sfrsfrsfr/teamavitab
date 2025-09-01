@@ -47,8 +47,9 @@ MapApp::MapApp(FuncsPtr funcs):
     trackButton->setToggleState(trackPlane);
     rotateButton = window->addSymbol(Widget::Symbol::ROTATE, std::bind(&MapApp::onRotate, this));
     rotateButton->setVisible(false);
-
-    mapImage = std::make_shared<img::Image>(window->getContentWidth(), window->getContentHeight(), img::COLOR_TRANSPARENT);
+    // FIXME
+    //mapImage = std::make_shared<img::Image>(window->getContentWidth(), window->getContentHeight(), img::COLOR_TRANSPARENT);
+    mapImage = std::make_shared<img::Image>(window->getContentWidth(), 300, img::COLOR_TRANSPARENT);
 
     mapWidget = std::make_shared<PixMap>(window);
     mapWidget->setClickable(true);

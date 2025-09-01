@@ -25,7 +25,7 @@ NotesApp::NotesApp(FuncsPtr appFuncs):
     App(appFuncs),
     window(std::make_shared<Window>(getUIContainer(), "Notes"))
 {
-    image.resize(window->getContentWidth(), window->getContentHeight(), img::COLOR_WHITE);
+//    image.resize(window->getContentWidth(), window->getContentHeight(), img::COLOR_WHITE);
 
     window->setOnClose([this] () { exit(); });
 
@@ -69,7 +69,7 @@ void NotesApp::createLayout() {
         break;
     case 1:
         textArea = std::make_shared<TextArea>(window, text);
-        textArea->setDimensions(window->getContentWidth(), window->getContentHeight());
+//        textArea->setDimensions(window->getContentWidth(), window->getContentHeight());
         keys = std::make_shared<Keyboard>(window, textArea);
         keys->setOnCancel([this] {
             textArea->setText("");
@@ -77,7 +77,7 @@ void NotesApp::createLayout() {
         break;
     case 2:
         textArea = std::make_shared<TextArea>(window, text);
-        textArea->setDimensions(window->getContentWidth(), window->getContentHeight());
+//        textArea->setDimensions(window->getContentWidth(), window->getContentHeight());
         break;
     }
 }

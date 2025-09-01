@@ -48,7 +48,8 @@ std::shared_ptr<Page> TabGroup::addTab(WidgetPtr tabs, const std::string &title)
     auto pageWidget = std::make_shared<Page>(tabs, page);
     return pageWidget;
 }
-
+/* FIXME
+    */
 void TabGroup::showTab(WidgetPtr tab) {
     setActiveTab(getTabIndex(tab));
 }
@@ -101,7 +102,7 @@ void TabGroup::removeTab(size_t i) {
 
     lv_obj_t *page = lv_tabview_get_tab(obj(), i);
     lv_obj_del(page);
-
+/*
     const lv_style_t * style_tabs = lv_obj_get_style(ext->btns);
     lv_coord_t indic_size = (lv_obj_get_width(obj()) - style_tabs->body.padding.inner * (ext->tab_cnt - 1) -
                  style_tabs->body.padding.left - style_tabs->body.padding.right) /
