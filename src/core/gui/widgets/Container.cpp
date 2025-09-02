@@ -22,39 +22,39 @@ namespace avitab {
 Container::Container(WidgetPtr parent):
     Widget(parent)
 {
-    lv_obj_t *cont = lv_cont_create(parentObj(), nullptr);
+    lv_obj_t *cont = lv_obj_create(parentObj());
     setObj(cont);
 }
 
 Container::Container():
     Widget(nullptr)
 {
-    lv_obj_t *cont = lv_cont_create(lv_layer_top(), nullptr);
+    lv_obj_t *cont = lv_obj_create(lv_layer_top());
     setObj(cont);
 }
-
+/* FIXME
 void Container::setLayoutRightColumns() {
-    lv_cont_set_layout(obj(), LV_LAYOUT_COL_R);
+    lv_obj_set_layout(obj(), LV_LAYOUT_COLUMN_RIGHT);
 }
 
 void Container::setLayoutPretty() {
-    lv_cont_set_layout(obj(), LV_LAYOUT_PRETTY);
+    lv_obj_set_layout(obj(), LV_LAYOUT_PRETTY_MID);
 }
 
 void Container::setLayoutRow() {
-    lv_cont_set_layout(obj(), LV_LAYOUT_ROW_M);
+    lv_obj_set_layout(obj(), LV_LAYOUT_ROW_MID);
 }
 
 void Container::setLayoutColumn() {
-    lv_cont_set_layout(obj(), LV_LAYOUT_COL_M);
+    lv_obj_set_layout(obj(), LV_LAYOUT_COLUMN_MID);
 }
 
 void Container::setLayoutGrid() {
-    lv_cont_set_layout(obj(), LV_LAYOUT_GRID);
+    lv_obj_set_layout(obj(), LV_LAYOUT_GRID);
 }
 
 void Container::setFit(Fit horiz, Fit vert) {
-    lv_cont_set_fit2(obj(), toLvFit(horiz), toLvFit(vert));
+    lv_obj_set_fit2(obj(), toLvFit(horiz), toLvFit(vert));
 }
 
 lv_fit_t Container::toLvFit(Container::Fit fit) {
@@ -66,5 +66,5 @@ lv_fit_t Container::toLvFit(Container::Fit fit) {
         default: return LV_FIT_NONE;
     }
 }
-
+*/
 } /* namespace avitab */

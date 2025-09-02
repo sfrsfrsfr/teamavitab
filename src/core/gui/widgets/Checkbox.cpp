@@ -22,9 +22,9 @@ namespace avitab {
 Checkbox::Checkbox(WidgetPtr parent, const std::string& caption):
     Widget(parent)
 {
-    lv_obj_t *cb = lv_cb_create(parentObj(), nullptr);
+    lv_obj_t *cb = lv_checkbox_create(parentObj());
 
-    lv_cb_set_text(cb, caption.c_str());
+    lv_checkbox_set_text(cb, caption.c_str());
 
     setObj(cb);
 }
@@ -33,22 +33,25 @@ void Checkbox::setCallback(Callback cb) {
     onToggle = cb;
 
     lv_obj_set_user_data(obj(), this);
-    lv_obj_set_event_cb(obj(), [] (lv_obj_t *cb, lv_event_t ev) {
-        if (ev == LV_EVENT_VALUE_CHANGED) {
-            Checkbox *us = reinterpret_cast<Checkbox *>(lv_obj_get_user_data(cb));
-            if (us) {
-                us->onToggle(us->isChecked());
-            }
+    lv_obj_add_event_cb(obj(), [] (lv_event_t *e) {
+        lv_obj_t *o = lv_event_get_target(e);
+        Checkbox *us = reinterpret_cast<Checkbox *>(lv_obj_get_user_data(o));
+        if (us) {
+            us->onToggle(us->isChecked());
         }
-    });
+    }, LV_EVENT_VALUE_CHANGED, nullptr);
 }
 
 void Checkbox::setChecked(bool check) {
-    lv_cb_set_checked(obj(), check);
+    if (check) {
+        lv_obj_add_state(obj(), LV_STATE_CHECKED);
+    } else {
+        lv_obj_clear_state(obj(), LV_STATE_CHECKED);
+    }
 }
 
 bool Checkbox::isChecked() {
-    return lv_cb_is_checked(obj());
+    return lv_obj_has_state(obj(), LV_STATE_CHECKED);
 }
 
 } /* namespace avitab */

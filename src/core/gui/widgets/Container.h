@@ -32,14 +32,16 @@ public:
 
     Container(); // on top layer
     Container(WidgetPtr parent);
+/* FIXME
     void setLayoutPretty();
     void setLayoutRightColumns();
     void setLayoutRow();
     void setLayoutColumn();
     void setLayoutGrid();
     void setFit(Fit horiz, Fit vert);
-private:
+ private:
     lv_fit_t toLvFit(Fit fit);
+*/
 };
 
 } /* namespace avitab */

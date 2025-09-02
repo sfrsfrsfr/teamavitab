@@ -392,7 +392,7 @@ void DocumentsApp::showAppSettings() {
     settingsContainer = std::make_shared<Container>();
     settingsContainer->setDimensions(ui->getWidth() / 8, ui->getHeight() / 2);
     settingsContainer->centerInParent();
-    settingsContainer->setFit(Container::Fit::TIGHT, Container::Fit::TIGHT);
+    // FIXME settingsContainer->setFit(Container::Fit::TIGHT, Container::Fit::TIGHT);
     settingsContainer->setVisible(false);
 
     settingsLabel = std::make_shared<Label>(settingsContainer, "Settings:");

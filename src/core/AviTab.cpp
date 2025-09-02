@@ -256,7 +256,8 @@ void AviTab::onPlaneLoad() {
                 headContainer = headerApp->getUIContainer();
                 headContainer->setParent(screen);
                 headContainer->setVisible(true);
-                headContainer->setFit(Container::Fit::FILL, Container::Fit::OFF);
+                // FIXME
+                //headContainer->setFit(Container::Fit::FILL, Container::Fit::OFF);
                 if (centerContainer) {
                     centerContainer->setPosition(0, 30);
                     centerContainer->setDimensions(screen->getWidth(), screen->getHeight() - 30);

@@ -22,9 +22,8 @@ namespace avitab {
 Slider::Slider(WidgetPtr parent, int min, int max):
     Widget(parent)
 {
-    lv_obj_t *obj = lv_slider_create(parentObj(), nullptr);
+    lv_obj_t *obj = lv_slider_create(parentObj());
     lv_slider_set_range(obj, min, max);
-    lv_slider_set_knob_in(obj, true);
     setObj(obj);
 }
 
@@ -32,18 +31,17 @@ void Slider::setCallback(Callback cb) {
     onChange = cb;
 
     lv_obj_set_user_data(obj(), this);
-    lv_obj_set_event_cb(obj(), [] (lv_obj_t *slider, lv_event_t ev) {
-        if (ev == LV_EVENT_VALUE_CHANGED) {
-            Slider *us = reinterpret_cast<Slider *>(lv_obj_get_user_data(slider));
-            if (us) {
-                us->onChange(lv_slider_get_value(slider));
-            }
+    lv_obj_add_event_cb(obj(), [] (lv_event_t *e) {
+        lv_obj_t *o = lv_event_get_target(e);
+        Slider *us = reinterpret_cast<Slider *>(lv_obj_get_user_data(o));
+        if (us) {
+            us->onChange(lv_slider_get_value(o));
         }
-    });
+    }, LV_EVENT_VALUE_CHANGED, nullptr);
 }
 
 void Slider::setValue(int v) {
-    lv_slider_set_value(obj(), v, false);
+    lv_slider_set_value(obj(), v, LV_ANIM_ON);
 }
 
 int Slider::getValue() {

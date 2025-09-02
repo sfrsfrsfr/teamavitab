@@ -22,19 +22,28 @@
 
 namespace avitab {
 
-MessageBox::MessageBox(WidgetPtr parent, const std::string &title):
+MessageBox::MessageBox(WidgetPtr parent, const std::string &text, const std::string &caption, Callback cb):
     Widget(parent)
 {
-    lv_obj_t *mbox = lv_mbox_create(parentObj(), nullptr);
-    lv_mbox_set_text(mbox, title.c_str());
+    // FIXME support more than one button again
+    std::string title = "";
+    buttons.pop_back();
+    buttons.push_back(strdup(caption.c_str()));
+    // invariant: the last entry of buttons is always an empty string
+    buttons.push_back("");
+
+    callbacks.push_back(cb);
+
+    lv_obj_t *mbox = lv_msgbox_create(parentObj(), title.c_str(), text.c_str(), &buttons[0], false);
+    addCallback();
+
     lv_obj_set_user_data(mbox, this);
     setObj(mbox);
 
-    // invariant: the last entry of buttons is always an empty string
     lv_obj_set_width(mbox, lv_obj_get_width(parentObj()) / 2);
-    buttons.push_back("");
-}
 
+}
+/* FIXME
 void MessageBox::addButton(const std::string& caption, Callback cb) {
     buttons.pop_back();
     buttons.push_back(strdup(caption.c_str()));
@@ -42,15 +51,39 @@ void MessageBox::addButton(const std::string& caption, Callback cb) {
 
     callbacks.push_back(cb);
 
-    lv_mbox_add_btns(obj(), &buttons[0]);
-    lv_obj_set_event_cb(obj(), [] (lv_obj_t *obj, lv_event_t ev) {
-        if (ev == LV_EVENT_CLICKED) {
-            const char *txt = lv_mbox_get_active_btn_text(obj);
+    lv_msgbox_add_btns(obj(), &buttons[0]);
+    lv_obj_add_event_cb(obj(), [] (lv_event_t *e) {
+        lv_obj_t *o = lv_event_get_current_target(e);
+        const char *txt = lv_msgbox_get_active_btn_text(o);
+        if (!txt) {
+            return;
+        }
+
+        MessageBox *us = reinterpret_cast<MessageBox *>(lv_obj_get_user_data(o));
+        if (us) {
+            for (size_t i = 0; i < us->buttons.size(); i++) {
+                if (strcmp(us->buttons[i], txt) == 0) {
+                    us->callbacks[i]();
+                    break;
+                }
+            }
+        }
+    }, LV_EVENT_CLICKED, nullptr);
+}
+*/
+void MessageBox::addCallback() {
+    lv_obj_t *btnm = lv_msgbox_get_btns(obj());
+
+    lv_obj_add_event_cb(btnm, [] (lv_event_t *e) {
+        lv_obj_t *o = lv_event_get_current_target(e);
+        lv_event_code_t ev = lv_event_get_code(e);
+        if (ev == LV_EVENT_VALUE_CHANGED) {
+            const char *txt = lv_msgbox_get_active_btn_text(o);
             if (!txt) {
                 return;
             }
 
-            MessageBox *us = reinterpret_cast<MessageBox *>(lv_obj_get_user_data(obj));
+            MessageBox *us = reinterpret_cast<MessageBox *>(lv_obj_get_user_data(o));
             if (us) {
                 for (size_t i = 0; i < us->buttons.size(); i++) {
                     if (strcmp(us->buttons[i], txt) == 0) {
@@ -60,7 +93,7 @@ void MessageBox::addButton(const std::string& caption, Callback cb) {
                 }
             }
         }
-    });
+    }, LV_EVENT_ALL, nullptr);
 }
 
 MessageBox::~MessageBox() {

@@ -24,7 +24,7 @@ namespace avitab {
 Label::Label(WidgetPtr parent, const std::string& title):
     Widget(parent)
 {
-    lv_obj_t *label = lv_label_create(parentObj(), nullptr);
+    lv_obj_t *label = lv_label_create(parentObj());
     setObj(label);
 
     setText(title);
@@ -41,7 +41,7 @@ void Label::setText(const std::string& title) {
 }
 
 void Label::setLongMode(bool longText) {
-    lv_label_set_long_mode(obj(), longText ? LV_LABEL_LONG_BREAK : LV_LABEL_LONG_DOT);
+    lv_label_set_long_mode(obj(), longText ? LV_LABEL_LONG_WRAP : LV_LABEL_LONG_DOT);
 }
 
 void Label::setTextFormatted(const std::string format, ...) {

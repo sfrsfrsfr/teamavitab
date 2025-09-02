@@ -31,7 +31,6 @@ public:
     void setOnResize(ResizeCB cb);
 
 private:
-    lv_signal_cb_t originalSignalCB;
     ResizeCB onResize;
 };
 

@@ -35,7 +35,8 @@ public:
     void hideScrollbars();
     void getHeaderArea(int &x1, int &y1, int &x2, int &y2);
     int getContentWidth();
-    int getContentHeight();
+    // FIXME
+    //int getContentHeight();
     std::shared_ptr<Button> addSymbol(Symbol smb, WindowCallback cb);
 private:
     lv_style_t scrlStyle;

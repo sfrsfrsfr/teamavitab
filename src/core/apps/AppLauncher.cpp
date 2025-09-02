@@ -33,7 +33,8 @@ AppLauncher::AppLauncher(FuncsPtr appFuncs):
     App(appFuncs)
 {
     auto cont = getUIContainer();
-    cont->setLayoutGrid();
+    // FIXME
+    //cont->setLayoutGrid();
     auto root = api().getAvitabInstallDir()/"icons";
 
     addEntry<ChartsApp>("Charts", root / "folder.png", AppId::CHARTS);

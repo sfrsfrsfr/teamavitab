@@ -77,7 +77,8 @@ void MapApp::createSettingsLayout() {
     settingsContainer = std::make_shared<Container>();
     settingsContainer->setDimensions(ui->getWidth() / 2, ui->getHeight() / 2);
     settingsContainer->centerInParent();
-    settingsContainer->setFit(Container::Fit::TIGHT, Container::Fit::TIGHT);
+
+    // FIXME settingsContainer->setFit(Container::Fit::TIGHT, Container::Fit::TIGHT);
     settingsContainer->setVisible(false);
 
     onlineMapsButton = std::make_shared<Button>(settingsContainer, "Online");
@@ -514,7 +515,8 @@ void MapApp::showOverlaySettings() {
     overlaysContainer = std::make_shared<Container>();
     overlaysContainer->setDimensions(ui->getWidth() / 8, ui->getHeight() / 2);
     overlaysContainer->alignTopRightInParent(10, 66);
-    overlaysContainer->setFit(Container::Fit::TIGHT, Container::Fit::TIGHT);
+    // FIXME
+    //overlaysContainer->setFit(Container::Fit::TIGHT, Container::Fit::TIGHT);
     overlaysContainer->setVisible(true);
 
     overlayLabel = std::make_shared<Label>(overlaysContainer, "Overlays:");
@@ -720,17 +722,18 @@ void MapApp::startCalibration() {
             getUIContainer(),
                 "The current file is not yet calibrated.\n\n"
                 "Please follow the instructions in the github teamavitab/avitab wiki to calibrate.\n"
-                "To fill the field with the current aircraft coordinates, clear the field and press the tracking button.\n"
-            );
-    messageBox->addButton("Ok", [this] () {
-        api().executeLater([this] () {
-            messageBox.reset();
-            rotateButton->setVisible(true);
-            if (map) {
-                map->beginCalibration();
-            }
-        });
-    });
+                "To fill the field with the current aircraft coordinates, clear the field and press the tracking button.\n",
+                "Ok",
+                [this] () {
+                    api().executeLater([this] () {
+                        messageBox.reset();
+                        rotateButton->setVisible(true);
+                        if (map) {
+                            map->beginCalibration();
+                        }
+                    });
+                }
+    );
     messageBox->centerInParent();
 
     coordsField = std::make_shared<TextArea>(window, "");
@@ -837,11 +840,11 @@ void MapApp::processCalibrationPoint(int step) {
 void MapApp::finalizeCalibration(std::string msg) {
     keyboard.reset();
     coordsField.reset();
-    messageBox = std::make_unique<avitab::MessageBox>(getUIContainer(), msg);
-    messageBox->addButton("Ok", [this] () {
-        api().executeLater([this] () {
-            messageBox.reset();
-        });
+    messageBox = std::make_unique<avitab::MessageBox>(getUIContainer(), msg, "Ok",
+        [this] () {
+            api().executeLater([this] () {
+                messageBox.reset();
+            });
     });
     messageBox->centerInParent();
     onTimer();

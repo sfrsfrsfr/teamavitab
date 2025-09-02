@@ -26,11 +26,16 @@ Screen::Screen():
 
     lv_obj_set_user_data(obj, this);
 
-    lv_theme_t * th = lv_theme_get_current();
-    if(th) {
-        lv_obj_set_style(obj, th->style.bg);
-    }
+    lv_obj_add_event_cb(obj, [] (lv_event_t *e) {
+        lv_obj_t *o = lv_event_get_target(e);
+        Screen *us = (Screen *) lv_obj_get_user_data(o);
 
+        if (us->onResize) {
+            us->onResize();
+        }
+    }, LV_EVENT_SIZE_CHANGED, nullptr);
+
+/*
     originalSignalCB = lv_obj_get_signal_cb(obj);
     lv_obj_set_signal_cb(obj, [] (lv_obj_t *obj, lv_signal_t sig, void *param) -> lv_res_t  {
         Screen *us = (Screen *) lv_obj_get_user_data(obj);
@@ -43,13 +48,14 @@ Screen::Screen():
 
         return us->originalSignalCB(obj, sig, param);
     });
-
+*/
     setObj(obj);
     setManaged();
 }
 
 Screen::~Screen() {
-    lv_obj_set_signal_cb(obj(), originalSignalCB);
+    // FIXME
+    //lv_obj_set_signal_cb(obj(), originalSignalCB);
 }
 
 void Screen::setOnResize(Screen::ResizeCB cb) {

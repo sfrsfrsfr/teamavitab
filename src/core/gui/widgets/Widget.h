@@ -45,7 +45,7 @@ public:
     void setDimensions(int width, int height);
     void setClickable(bool click);
     void setClickHandler(ClickHandler handler);
-    void enablePanning();
+    //void enablePanning();
     void centerInParent();
     void alignLeftInParent(int padLeft = 0);
     void alignRightInParent(int padRight = 0);
@@ -84,6 +84,5 @@ private:
     lv_obj_t *lvObj = nullptr;
     WidgetPtr parent;
     ClickHandler onClick;
-    lv_signal_cb_t origSigFunc = nullptr;
 };
 }

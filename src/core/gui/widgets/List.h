@@ -39,6 +39,7 @@ public:
     void scrollDown();
 private:
     ListCallback onSelect;
+    lv_group_t *grp;
 };
 
 } /* namespace avitab */

@@ -30,9 +30,9 @@ public:
     void setShowScrollbar(bool show);
     int getContentWidth();
     int getContentHeight();
-    void setFit(bool horz, bool vert);
-    void setLayoutCenterColumns();
-    void setLayoutRows();
+//    void setFit(bool horz, bool vert);
+//    void setLayoutCenterColumns();
+//    void setLayoutRows();
 };
 
 } /* namespace avitab */

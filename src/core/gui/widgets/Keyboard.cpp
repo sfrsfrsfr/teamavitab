@@ -23,14 +23,17 @@ Keyboard::Keyboard(WidgetPtr parent, std::shared_ptr<TextArea> target):
     Widget(parent),
     targetText(target)
 {
-    lv_obj_t *keys = lv_kb_create(parentObj(), nullptr);
-    lv_kb_set_cursor_manage(keys, true);
-    lv_kb_set_ta(keys, target->obj());
+    lv_obj_t *keys = lv_keyboard_create(parentObj());
+    // FIXME
+    //lv_keyboard_set_cursor_manage(keys, true);
+    lv_keyboard_set_textarea(keys, target->obj());
     lv_obj_set_user_data(keys, this);
 
-    lv_obj_set_event_cb(keys, [] (lv_obj_t *ref, lv_event_t ev) {
+    lv_obj_add_event_cb(keys, [] (lv_event_t *e) {
+        lv_obj_t *ref = lv_event_get_target(e);
+        lv_event_code_t ev = lv_event_get_code(e);
         Keyboard *us = reinterpret_cast<Keyboard *>(lv_obj_get_user_data(ref));
-        if (ev == LV_EVENT_APPLY) {
+        if (ev == LV_EVENT_READY) {
             if (us) {
                 if (us->onOk) {
                     us->onOk();
@@ -41,18 +44,16 @@ Keyboard::Keyboard(WidgetPtr parent, std::shared_ptr<TextArea> target):
                 if (us->onCancel) {
                     us->onCancel();
                 }
-                lv_kb_set_ta(ref, us->targetText->obj());
+                lv_keyboard_set_textarea(ref, us->targetText->obj());
             }
-        } else if (ev == LV_EVENT_VALUE_CHANGED) {
-            lv_kb_def_event_cb(ref, ev);
         }
-    });
+    }, LV_EVENT_ALL, nullptr);
 
     setObj(keys);
 }
 
 void Keyboard::setTarget(std::shared_ptr<TextArea> target) {
-    lv_kb_set_ta(obj(), target->obj());
+    lv_keyboard_set_textarea(obj(), target->obj());
 }
 
 void Keyboard::setOnCancel(Callback cb) {
@@ -70,7 +71,15 @@ void Keyboard::hideEnterKey() {
         "_", "-", "z", "x", "c", "v", "b", "n", "m", ".", ",", ":", "\n",
         LV_SYMBOL_CLOSE, LV_SYMBOL_LEFT, " ", LV_SYMBOL_RIGHT, LV_SYMBOL_OK, ""
     };
-    lv_kb_set_map(obj(), defaultMapWithoutEnter);
+    /*Set the relative width of the buttons and other controls*/
+    static const lv_btnmatrix_ctrl_t kb_ctrl[] = {
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1
+    };
+
+    lv_keyboard_set_map(obj(), LV_KEYBOARD_MODE_TEXT_LOWER, defaultMapWithoutEnter, kb_ctrl);
 }
 
 void Keyboard::setNumericLayout() {
@@ -78,8 +87,13 @@ void Keyboard::setNumericLayout() {
             "+", "-", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "\n",
             "ABC", ",", " ", LV_SYMBOL_BACKSPACE, LV_SYMBOL_LEFT, LV_SYMBOL_RIGHT, LV_SYMBOL_OK, ""
     };
+    /*Set the relative width of the buttons and other controls*/
+    static const lv_btnmatrix_ctrl_t kb_ctrl[] = {
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1
+    };
 
-    lv_kb_set_map(obj(), kb_map_num);
+    lv_keyboard_set_map(obj(), LV_KEYBOARD_MODE_SPECIAL, kb_map_num, kb_ctrl);
 }
 
 bool Keyboard::hasOkAction() const {

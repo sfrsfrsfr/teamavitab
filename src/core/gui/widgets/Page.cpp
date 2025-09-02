@@ -22,7 +22,7 @@ namespace avitab {
 Page::Page(WidgetPtr parent):
     Widget(parent)
 {
-    lv_obj_t *page = lv_page_create(parentObj(), nullptr);
+    lv_obj_t *page = lv_obj_create(parentObj());
     setObj(page);
 }
 
@@ -33,21 +33,21 @@ Page::Page(WidgetPtr parent, lv_obj_t *page):
 }
 
 void Page::setShowScrollbar(bool show) {
-    lv_page_set_sb_mode(obj(), show ? LV_SB_MODE_AUTO : LV_SB_MODE_OFF);
+    lv_obj_set_scrollbar_mode(obj(), show ? LV_SCROLLBAR_MODE_AUTO : LV_SCROLLBAR_MODE_OFF);
 }
 
 void Page::clear() {
-    lv_obj_clean(lv_page_get_scrl(obj()));
+    lv_obj_clean((obj()));
 }
 
 int Page::getContentWidth() {
-    return lv_obj_get_width(lv_page_get_scrl(obj()));
+    return lv_obj_get_width(obj());
 }
 
 int Page::getContentHeight() {
-    return lv_obj_get_height(lv_page_get_scrl(obj()));
+    return lv_obj_get_height(obj());
 }
-
+/* FIXME
 void Page::setFit(bool horz, bool vert) {
     lv_page_set_scrl_fit2(obj(), horz, vert);
 }
@@ -59,5 +59,6 @@ void Page::setLayoutCenterColumns() {
 void Page::setLayoutRows() {
     lv_page_set_scrl_layout(obj(), LV_LAYOUT_ROW_T);
 }
+*/
 
 } /* namespace avitab */

@@ -27,9 +27,9 @@ namespace avitab {
 
 namespace {
 bool lvglIsInitialized = false;
-lv_disp_buf_t lvDispBuf;
-lv_disp_drv_t lvDriver;
-lv_indev_drv_t inputDriver;
+static lv_disp_draw_buf_t lvDispBuf;
+static lv_disp_drv_t lvDriver;
+static lv_indev_drv_t inputDriver;
 std::vector<uint32_t> tmpBuffer;
 }
 
@@ -40,24 +40,12 @@ LVGLToolkit::LVGLToolkit(std::shared_ptr<UiDriverBase> drv):
 
     if (!lvglIsInitialized) {
         // LVGL does not support de-initialization so we can only do this once
-        lv_log_register_print_cb([] (lv_log_level_t level, const char *file, uint32_t line, const char *msg) {
-            switch (level) {
-                case LV_LOG_LEVEL_WARN:
-                    logger::warn("GUI: %s:%d %s", file, line, msg);
-                    break;
-                case LV_LOG_LEVEL_ERROR:
-                    logger::error("GUI: %s:%d %s", file, line, msg);
-                    break;
-                default:
-                    logger::verbose("GUI: %s:%d %s", file, line, msg);
-                    break;
-            }
+        lv_log_register_print_cb([] (const char *msg) {
+            logger::warn("GUI: %s", msg);
         });
 
         lv_init();
 
-        lv_theme_t *theme = lv_theme_night_init(210, LV_FONT_DEFAULT);
-        lv_theme_set_current(theme);
         lvglIsInitialized = true;
     }
 
@@ -73,17 +61,18 @@ LVGLToolkit::LVGLToolkit(std::shared_ptr<UiDriverBase> drv):
 
 void LVGLToolkit::initDisplayDriver() {
     static_assert(sizeof(lv_color_t) == sizeof(uint32_t), "Invalid lvgl color type");
-    bool isUpdate = (lvDriver.buffer != nullptr);
+    bool isUpdate = (lvDriver.draw_buf != nullptr);
 
-    tmpBuffer.resize(LV_HOR_RES_MAX * LV_VER_RES_MAX);
-    lv_disp_buf_init(&lvDispBuf, tmpBuffer.data(), nullptr, tmpBuffer.size());
+    //FIXME 2047
+    tmpBuffer.resize(2047 * 2047);
+    lv_disp_draw_buf_init(&lvDispBuf, tmpBuffer.data(), nullptr, tmpBuffer.size());
 
     lv_disp_drv_init(&lvDriver);
 
     lvDriver.user_data = this;
     lvDriver.hor_res = INITIAL_WIDTH;
     lvDriver.ver_res = INITIAL_HEIGHT;
-    lvDriver.buffer = &lvDispBuf;
+    lvDriver.draw_buf = &lvDispBuf;
 
     lvDriver.flush_cb = [] (lv_disp_drv_t *drv, const lv_area_t *area, lv_color_t *data) {
         LVGLToolkit *us = (LVGLToolkit *) drv->user_data;
@@ -102,8 +91,9 @@ void LVGLToolkit::initDisplayDriver() {
 
     driver->setResizeCallback([this] (int w, int h) {
         executeLater([w, h] {
-            lvDriver.hor_res = std::min(w, LV_HOR_RES_MAX);
-            lvDriver.ver_res = std::min(h, LV_VER_RES_MAX);
+            //FIXME 2047
+            lvDriver.hor_res = std::min(w, 2047);
+            lvDriver.ver_res = std::min(h, 2047);
             lv_disp_drv_update(lv_disp_get_default(), &lvDriver);
         });
     });
@@ -124,10 +114,10 @@ void LVGLToolkit::initInputDriver() {
 
     inputDriver.type = LV_INDEV_TYPE_POINTER;
     inputDriver.user_data = this;
-    inputDriver.read_cb = [] (lv_indev_drv_t  *drv, lv_indev_data_t *data) -> bool {
+    inputDriver.read_cb = [] (lv_indev_drv_t  *drv, lv_indev_data_t *data) {
         LVGLToolkit *us = (LVGLToolkit *) drv->user_data;
         if (!us) {
-            return false;
+            return;
         }
 
         int x, y;
@@ -136,7 +126,7 @@ void LVGLToolkit::initInputDriver() {
         data->state = pressed ? LV_INDEV_STATE_PR : LV_INDEV_STATE_REL;
         data->point.x = x;
         data->point.y = y;
-        return false;
+        return;
     };
 
     if (isUpdate) {
@@ -263,22 +253,22 @@ void LVGLToolkit::handleKeyboard() {
     uint32_t c = 0;
     while ((c = driver->popKeyPress()) != 0) {
         if (keyboard) {
-            auto ta = lv_kb_get_ta(keyboard);
+            auto ta = lv_keyboard_get_textarea(keyboard);
             auto keyb = (Keyboard *) lv_obj_get_user_data(keyboard);
             if (!ta) {
                 continue;
             }
 
             if (c == '\b') {
-                lv_ta_del_char(ta);
+                lv_textarea_del_char(ta);
             } else if (c == '\n') {
                 if (keyb && keyb->hasOkAction()) {
-                    lv_obj_get_event_cb(keyboard)(keyboard, LV_EVENT_APPLY);
+                    lv_event_send(keyboard, LV_EVENT_READY, nullptr);
                 } else {
-                    lv_ta_add_char(ta, '\n');
+                    lv_textarea_add_char(ta, '\n');
                 }
             } else {
-                lv_ta_add_char(ta, lv_txt_encoded_conv_wc(c));
+                lv_textarea_add_char(ta, _lv_txt_encoded_conv_wc(c));
             }
         }
     }
@@ -287,28 +277,27 @@ void LVGLToolkit::handleKeyboard() {
 }
 
 lv_obj_t *LVGLToolkit::searchActiveKeyboard(lv_obj_t* obj) {
-    if (!obj || lv_obj_get_hidden(obj)) {
+    if (!obj || lv_obj_has_flag(obj, LV_OBJ_FLAG_HIDDEN)) {
         return nullptr;
     }
 
     lv_obj_t *screen = lv_scr_act();
     if (screen) {
-        if (!lv_area_is_on(&screen->coords, &obj->coords)) {
+        if (!_lv_area_is_on(&screen->coords, &obj->coords)) {
             return nullptr;
         }
     }
 
-    lv_obj_t *curChild = nullptr;
-    while ((curChild = lv_obj_get_child(obj, curChild)) != nullptr) {
+    uint32_t i;
+    for(i = 0; i < lv_obj_get_child_cnt(obj); i++) {
+    lv_obj_t * curChild = lv_obj_get_child(obj, i);
         lv_obj_t *keyb = searchActiveKeyboard(curChild);
         if (keyb) {
             return keyb;
         }
 
-        lv_obj_type_t type{};
-        lv_obj_get_type(curChild, &type);
-        if (strcmp(type.type[0], "lv_kb") == 0) {
-            if (lv_area_is_in(&curChild->coords, &screen->coords)) {
+        if (lv_obj_check_type(curChild, &lv_keyboard_class)) {
+            if (_lv_area_is_in(&curChild->coords, &screen->coords, 0)) {
                 return curChild;
             }
         }

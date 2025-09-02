@@ -25,7 +25,8 @@ namespace avitab {
 TabGroup::TabGroup(WidgetPtr parent):
     Widget(parent)
 {
-    lv_obj_t *tabs = lv_tabview_create(parentObj(), nullptr);
+    // FIXME tab_height/tab_width
+    lv_obj_t *tabs = lv_tabview_create(parentObj(), LV_DIR_TOP, 15);
 
     setObj(tabs);
 }
@@ -34,12 +35,11 @@ void TabGroup::setCallback(TabChangeCallback cb) {
     callbackFunc = cb;
     lv_obj_set_user_data(obj(), this);
 
-    lv_obj_set_event_cb(obj(), [] (lv_obj_t *obj, lv_event_t ev) {
-        if (ev == LV_EVENT_VALUE_CHANGED) {
-            TabGroup *me = reinterpret_cast<TabGroup *>(lv_obj_get_user_data(obj));
-            me->callbackFunc();
-        }
-    });
+    lv_obj_add_event_cb(obj(), [] (lv_event_t *e) {
+        lv_obj_t *o = lv_event_get_target(e);
+        TabGroup *me = reinterpret_cast<TabGroup *>(lv_obj_get_user_data(o));
+        me->callbackFunc();
+    }, LV_EVENT_VALUE_CHANGED, nullptr);
 }
 
 std::shared_ptr<Page> TabGroup::addTab(WidgetPtr tabs, const std::string &title) {
@@ -49,7 +49,6 @@ std::shared_ptr<Page> TabGroup::addTab(WidgetPtr tabs, const std::string &title)
     return pageWidget;
 }
 /* FIXME
-    */
 void TabGroup::showTab(WidgetPtr tab) {
     setActiveTab(getTabIndex(tab));
 }
@@ -57,7 +56,7 @@ void TabGroup::showTab(WidgetPtr tab) {
 void TabGroup::delTab(WidgetPtr tab) {
     removeTab(getTabIndex(tab));
 }
-
+*/
 size_t TabGroup::getTabIndex(WidgetPtr tab) {
     // FIXME
     /*
@@ -111,6 +110,8 @@ void TabGroup::removeTab(size_t i) {
 
     lv_obj_t *page = lv_tabview_get_tab(obj(), i);
     lv_obj_del(page);
+*/
+/*
     const lv_style_t * style_tabs = lv_obj_get_style(ext->btns);
     lv_coord_t indic_size = (lv_obj_get_width(obj()) - style_tabs->body.padding.inner * (ext->tab_cnt - 1) -
                  style_tabs->body.padding.left - style_tabs->body.padding.right) /

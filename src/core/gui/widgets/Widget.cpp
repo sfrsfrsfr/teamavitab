@@ -55,7 +55,12 @@ void Widget::setPosition(int x, int y) {
 }
 
 void Widget::setClickable(bool click) {
-    lv_obj_set_click(obj(), click);
+    if (click) {
+        lv_obj_add_flag(obj(), LV_OBJ_FLAG_CLICKABLE);
+    } else {
+        lv_obj_clear_flag(obj(), LV_OBJ_FLAG_CLICKABLE);
+
+    }
 }
 
 void Widget::setDimensions(int width, int height) {
@@ -63,63 +68,51 @@ void Widget::setDimensions(int width, int height) {
 }
 
 void Widget::centerInParent() {
-    lv_obj_align(lvObj, nullptr, LV_ALIGN_CENTER, 0, 0);
-    lv_obj_set_auto_realign(lvObj, true);
+    lv_obj_align(lvObj, LV_ALIGN_CENTER, 0, 0);
 }
 
 void Widget::alignLeftInParent(int padLeft) {
-    lv_obj_align(lvObj, nullptr, LV_ALIGN_IN_LEFT_MID, padLeft, 0);
-    lv_obj_set_auto_realign(lvObj, true);
+    lv_obj_align(lvObj, LV_ALIGN_LEFT_MID, padLeft, 0);
 }
 
 void Widget::alignRightInParent(int padRight) {
-    lv_obj_align(lvObj, nullptr, LV_ALIGN_IN_RIGHT_MID, -padRight, 0);
-    lv_obj_set_auto_realign(lvObj, true);
+    lv_obj_align(lvObj, LV_ALIGN_RIGHT_MID, -padRight, 0);
 }
 
 void Widget::alignTopRightInParent(int padRight, int padTop) {
-    lv_obj_align(lvObj, nullptr, LV_ALIGN_IN_TOP_RIGHT, -padRight, padTop);
-    lv_obj_set_auto_realign(lvObj, true);
+    lv_obj_align(lvObj, LV_ALIGN_TOP_RIGHT, -padRight, padTop);
 }
 
 void Widget::alignInBottomLeft() {
-    lv_obj_align(lvObj, nullptr, LV_ALIGN_IN_BOTTOM_LEFT, 0, 0);
-    lv_obj_set_auto_realign(lvObj, true);
+    lv_obj_align(lvObj, LV_ALIGN_BOTTOM_LEFT, 0, 0);
 }
 
 void Widget::alignInBottomCenter() {
-    lv_obj_align(lvObj, nullptr, LV_ALIGN_IN_BOTTOM_MID, 0, 0);
-    lv_obj_set_auto_realign(lvObj, true);
+    lv_obj_align(lvObj, LV_ALIGN_BOTTOM_MID, 0, 0);
 }
 
 void Widget::alignInBottomRight() {
-    lv_obj_align(lvObj, nullptr, LV_ALIGN_IN_BOTTOM_RIGHT, 0, 0);
-    lv_obj_set_auto_realign(lvObj, true);
+    lv_obj_align(lvObj, LV_ALIGN_BOTTOM_RIGHT, 0, 0);
 }
 
 void Widget::alignInTopLeft() {
-    lv_obj_align(lvObj, nullptr, LV_ALIGN_IN_TOP_LEFT, 0, 0);
-    lv_obj_set_auto_realign(lvObj, true);
+    lv_obj_align(lvObj, LV_ALIGN_TOP_LEFT, 0, 0);
 }
 
 void Widget::alignInTopRight(int xPad) {
-    lv_obj_align(lvObj, nullptr, LV_ALIGN_IN_TOP_RIGHT, -xPad, 0);
-    lv_obj_set_auto_realign(lvObj, true);
+    lv_obj_align(lvObj, LV_ALIGN_TOP_RIGHT, -xPad, 0);
 }
 
-void Widget::alignLeftOf(WidgetPtr base, int xPad) {
-    lv_obj_align(lvObj, base->obj(), LV_ALIGN_OUT_LEFT_MID, -xPad, 0);
-    lv_obj_set_auto_realign(lvObj, true);
+void Widget::alignLeftOf(WidgetPtr base) {
+    lv_obj_align_to(lvObj, base->obj(), LV_ALIGN_OUT_LEFT_MID, 0, 0);
 }
 
 void Widget::alignRightOf(WidgetPtr base, int xPad) {
-    lv_obj_align(lvObj, base->obj(), LV_ALIGN_OUT_RIGHT_MID, xPad, 0);
-    lv_obj_set_auto_realign(lvObj, true);
+    lv_obj_align_to(lvObj, base->obj(), LV_ALIGN_OUT_RIGHT_MID, xPad, 0);
 }
 
 void Widget::alignBelow(WidgetPtr base, int yPad) {
-    lv_obj_align(lvObj, base->obj(), LV_ALIGN_OUT_BOTTOM_LEFT, 0, yPad);
-    lv_obj_set_auto_realign(lvObj, true);
+    lv_obj_align_to(lvObj, base->obj(), LV_ALIGN_OUT_BOTTOM_LEFT, 0, yPad);
 }
 
 int Widget::getWidth() {
@@ -131,11 +124,15 @@ int Widget::getHeight() {
 }
 
 void Widget::setVisible(bool visible) {
-    lv_obj_set_hidden(obj(), !visible);
+    if (visible) {
+        lv_obj_add_flag(obj(), LV_OBJ_FLAG_HIDDEN);
+    } else {
+        lv_obj_clear_flag(obj(), LV_OBJ_FLAG_HIDDEN);
+    }
 }
 
 bool Widget::isVisible() {
-    return lv_obj_get_hidden(obj()) == 0;
+    return lv_obj_has_flag(obj(), LV_OBJ_FLAG_HIDDEN);
 }
 
 lv_img_dsc_t Widget::toLVImage(const uint32_t* pix, int width, int height) {
@@ -164,15 +161,32 @@ int Widget::getY() {
     return lv_obj_get_y(obj());
 }
 
+/* FIXME N/A in v8 but not used atm
 void Widget::enablePanning() {
     lv_obj_set_drag(obj(), true);
 }
+*/
 
 void Widget::setClickHandler(ClickHandler handler) {
     onClick = handler;
-    origSigFunc = lv_obj_get_signal_cb(obj());
     lv_obj_set_user_data(obj(), this);
 
+    lv_obj_add_event_cb(obj(), [] (lv_event_t *e) {
+        lv_obj_t *o = lv_event_get_target(e);
+        lv_event_code_t ev = lv_event_get_code(e);
+        Widget *us = reinterpret_cast<Widget *>(lv_obj_get_user_data(o));
+        if (ev == LV_EVENT_PRESSED || ev == LV_EVENT_PRESSING || ev == LV_EVENT_RELEASED || ev == LV_EVENT_PRESS_LOST) {
+            lv_point_t point;
+            lv_indev_t *dev = lv_event_get_indev(e);
+            lv_indev_get_point(dev, &point);
+            if (us->onClick) {
+                bool start = (ev == LV_EVENT_PRESSED);
+                bool end = (ev == LV_EVENT_RELEASED) || (ev == LV_EVENT_PRESS_LOST);
+                us->onClick(point.x - o->coords.x1, point.y - o->coords.y1, start, end);
+            }
+        }
+    }, LV_EVENT_ALL, nullptr);
+/*
     lv_obj_set_signal_cb(obj(), [] (_lv_obj_t *o, lv_signal_t sign, void *param) -> lv_res_t {
         Widget *us = reinterpret_cast<Widget *>(lv_obj_get_user_data(o));
         if (sign == LV_SIGNAL_PRESSED || sign == LV_SIGNAL_PRESSING || sign == LV_SIGNAL_RELEASED || sign == LV_SIGNAL_PRESS_LOST) {
@@ -189,6 +203,7 @@ void Widget::setClickHandler(ClickHandler handler) {
             return us->origSigFunc(o, sign, param);
         }
     });
+*/
 }
 
 const void* Widget::symbolToLVSymbol(Symbol symbol) {

@@ -24,11 +24,14 @@ namespace avitab {
 Button::Button(WidgetPtr parent, const std::string& text):
     Widget(parent)
 {
-    lv_obj_t *button = lv_btn_create(parentObj(), nullptr);
-    lv_cont_set_fit(button, LV_FIT_TIGHT);
+    lv_obj_t *button = lv_btn_create(parentObj());
+    // FIXME
+    //lv_cont_set_fit(button, LV_FIT_TIGHT);
 
-    lv_obj_t *label = lv_label_create(button, nullptr);
+    lv_obj_t *label = lv_label_create(button);
     lv_label_set_text(label, text.c_str());
+    lv_obj_center(label);
+    lv_obj_clear_flag(label, LV_OBJ_FLAG_CLICKABLE);
 
     setObj(button);
 }
@@ -40,56 +43,38 @@ Button::Button(WidgetPtr parent, img::Image &&icon, const std::string& caption, 
     iconImage = toLVImage(iconData.getPixels(), iconData.getWidth(), iconData.getHeight());
     lv_img_cache_invalidate_src(&iconImage);
 
-    lv_obj_t *button = lv_btn_create(parentObj(), nullptr);
+    lv_obj_t *button = lv_btn_create(parentObj());
 
-    lv_style_copy(&styleWhenReleased, lv_btn_get_style(button, LV_BTN_STYLE_REL));
-    lv_style_copy(&styleWhenPressed, lv_btn_get_style(button, LV_BTN_STYLE_PR));
-
-    styleWhenPressed.body.opa = 0;
-    styleWhenReleased.body.opa = 0;
-
-    lv_btn_set_style(button, LV_BTN_STYLE_PR, &styleWhenPressed);
-    lv_btn_set_style(button, LV_BTN_STYLE_REL, &styleWhenReleased);
-
-    lv_obj_t *ico = lv_img_create(button, nullptr);
+    lv_obj_t *ico = lv_img_create(button);
     lv_img_set_src(ico, &iconImage);
-    lv_obj_set_click(ico, false);
+    lv_obj_clear_flag(ico, LV_OBJ_FLAG_CLICKABLE);
 
-    lv_obj_t *label = lv_label_create(button, nullptr);
+    lv_obj_t *label = lv_label_create(button);
     lv_label_set_text(label, caption.c_str());
+    lv_obj_clear_flag(label, LV_OBJ_FLAG_CLICKABLE);
 
+ /* FIXME
     if (width >= 0) {
         lv_cont_set_fit2(button, LV_FIT_NONE, LV_FIT_TIGHT);
         lv_obj_set_width(button, width);
     } else {
-        lv_cont_set_fit(button, LV_FIT_TIGHT);
+    lv_cont_set_fit(button, LV_FIT_TIGHT);
     }
-
+*/
     setObj(button);
 }
 
 Button::Button(WidgetPtr parent, Symbol smb):
     Widget(parent)
 {
-    lv_obj_t *button = lv_btn_create(parentObj(), nullptr);
-    lv_cont_set_fit(button, LV_FIT_TIGHT);
+    lv_obj_t *button = lv_btn_create(parentObj());
+    // FIXME
+    //lv_cont_set_fit(button, LV_FIT_TIGHT);
 
-    lv_style_copy(&styleWhenReleased, lv_btn_get_style(button, LV_BTN_STYLE_REL));
-    lv_style_copy(&styleWhenPressed, lv_btn_get_style(button, LV_BTN_STYLE_PR));
-
-    styleWhenReleased.body.border.part = LV_BORDER_NONE;
-    styleWhenReleased.body.opa = 0;
-    styleWhenReleased.image.color = lv_color_hex3(0xFFF);
-
-    styleWhenPressed.body.border.part = (lv_border_part_t) (LV_BORDER_LEFT | LV_BORDER_RIGHT);
-    styleWhenPressed.body.opa = 0;
-    styleWhenPressed.image.color = lv_color_hex3(0xFFF);
-    lv_btn_set_style(button, LV_BTN_STYLE_PR, &styleWhenPressed);
-    lv_btn_set_style(button, LV_BTN_STYLE_REL, &styleWhenReleased);
-
-    lv_obj_t *ico = lv_img_create(button, nullptr);
+    lv_obj_t *ico = lv_img_create(button);
     lv_img_set_src(ico, symbolToLVSymbol(smb));
-    lv_obj_set_click(ico, false);
+    lv_obj_center(ico);
+    lv_obj_clear_flag(ico, LV_OBJ_FLAG_CLICKABLE);
 
     setObj(button);
 }
@@ -100,30 +85,38 @@ Button::Button(WidgetPtr parent, lv_obj_t* obj):
     setManagedObj(obj);
 }
 
+/* FIXME
 void Button::setFit(bool hor, bool vert) {
     lv_cont_set_fit2(obj(), hor, vert);
 }
-
+*/
 void Button::setCallback(ButtonCallback cb) {
     callbackFunc = cb;
     lv_obj_set_user_data(obj(), this);
 
-    lv_obj_set_event_cb(obj(), [] (lv_obj_t *obj, lv_event_t ev) {
-        if (ev == LV_EVENT_CLICKED) {
-            Button *us = reinterpret_cast<Button *>(lv_obj_get_user_data(obj));
-            if (us->callbackFunc) {
-                us->callbackFunc(*us);
-            }
+    lv_obj_add_event_cb(obj(), [] (lv_event_t *e) {
+        lv_obj_t *o = lv_event_get_target(e);
+        Button *us = reinterpret_cast<Button *>(lv_obj_get_user_data(o));
+        if (us->callbackFunc) {
+            us->callbackFunc(*us);
         }
-    });
+    }, LV_EVENT_CLICKED, nullptr);
 }
 
 void Button::setToggleable(bool toggleable) {
-    lv_btn_set_toggle(obj(), toggleable);
+    if (toggleable) {
+        lv_obj_add_flag(obj(), LV_OBJ_FLAG_CHECKABLE);
+    } else {
+        lv_obj_clear_flag(obj(), LV_OBJ_FLAG_CHECKABLE);
+    }
 }
 
 void Button::setToggleState(bool toggled) {
-    lv_btn_set_state(obj(), toggled ? LV_BTN_STATE_TGL_PR : LV_BTN_STATE_REL);
+    if (toggled) {
+        lv_obj_add_state(obj(), LV_STATE_CHECKED);
+    } else {
+        lv_obj_clear_state(obj(), LV_STATE_CHECKED);
+    }
 }
 
 } /* namespace avitab */

@@ -22,7 +22,7 @@ namespace avitab {
 PixMap::PixMap(WidgetPtr parent):
     Widget(parent)
 {
-    lv_obj_t *img = lv_img_create(parentObj(), nullptr);
+    lv_obj_t *img = lv_img_create(parentObj());
     setObj(img);
 }
 

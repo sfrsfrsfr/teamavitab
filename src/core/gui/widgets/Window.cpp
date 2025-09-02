@@ -23,28 +23,22 @@ namespace avitab {
 Window::Window(WidgetPtr parent, const std::string& title):
     Widget(parent)
 {
-    lv_obj_t *win = lv_win_create(parentObj(), nullptr);
-    lv_win_set_title(win, title.c_str());
+    // FIXME header height 20
+    lv_obj_t *win = lv_win_create(parentObj(), 20);
+    lv_win_add_title(win, title.c_str());
     lv_obj_set_user_data(win, this);
 
     setObj(win);
-
-    lv_style_copy(&scrlStyle, lv_win_get_style(win, LV_WIN_STYLE_CONTENT));
-    scrlStyle.body.padding.left = 0;
-    scrlStyle.body.padding.right = 0;
-    scrlStyle.body.padding.top = 0;
-    scrlStyle.body.padding.bottom = 0;
-    scrlStyle.body.padding.inner = 0;
-    lv_win_set_style(win, LV_WIN_STYLE_CONTENT, &scrlStyle);
 
     setDimensions(parent->getWidth() - 10, parent->getHeight());
     centerInParent();
 }
 
 void Window::setCaption(const std::string& title) {
-    lv_win_set_title(obj(), title.c_str());
+    lv_win_add_title(obj(), title.c_str());
 }
 
+/* FIXME
 void Window::hideScrollbars() {
     lv_win_set_sb_mode(obj(), LV_SB_MODE_OFF);
 }
@@ -58,16 +52,18 @@ void Window::getHeaderArea(int &x1, int &y1, int &x2, int &y2) {
     auto h = lv_obj_get_height(ext->header);
     y2 = area.y1 + h;
 }
+ */
 
 int Window::getContentWidth() {
-    return lv_win_get_width(obj()) - 5;
+    return lv_obj_get_width(obj()) - 5;
 }
 
+/* FIXME
 int Window::getContentHeight() {
     lv_win_ext_t *ext = reinterpret_cast<lv_win_ext_t *>(lv_obj_get_ext_attr(obj()));
     return lv_obj_get_height(ext->page) - 6;
 }
-
+*/
 void Window::setOnClose(WindowCallback cb) {
     addSymbol(Symbol::CLOSE, cb);
 }
@@ -79,8 +75,20 @@ std::shared_ptr<Button> Window::addSymbol(Symbol smb, WindowCallback cb) {
     if (!lvSymbol) {
         throw std::runtime_error("Invalid symbol passed to window");
     }
+    // FIXME button width 20
+    lv_obj_t *btn = lv_win_add_btn(obj(), lvSymbol, 20);
+    lv_obj_add_event_cb(btn, [] (lv_event_t *e) {
+        lv_obj_t *btn = lv_event_get_target(e);
+        lv_obj_t *winObj = lv_obj_get_parent(btn);
+        Window *winCls = reinterpret_cast<Window *>(lv_obj_get_user_data(winObj));
+        int smbInt = reinterpret_cast<intptr_t>(lv_obj_get_user_data(btn));
 
-    lv_obj_t *btn = lv_win_add_btn(obj(), lvSymbol);
+        if (winCls) {
+            winCls->callbacks[static_cast<Symbol>(smbInt)]();
+        }
+    }, LV_EVENT_CLICKED, nullptr);
+    lv_obj_set_user_data(btn, reinterpret_cast<void *>(smb));
+/*
     lv_obj_set_event_cb(btn, [] (lv_obj_t *btn, lv_event_t ev) {
         if (ev == LV_EVENT_CLICKED) {
             lv_obj_t *winObj = lv_win_get_from_btn(btn);
@@ -93,7 +101,7 @@ std::shared_ptr<Button> Window::addSymbol(Symbol smb, WindowCallback cb) {
         }
     });
     lv_obj_set_user_data(btn, reinterpret_cast<void *>(smb));
-
+*/
     return std::make_shared<Button>(nullptr, btn);
 }
 
