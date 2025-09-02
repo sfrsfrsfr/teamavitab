@@ -125,14 +125,14 @@ int Widget::getHeight() {
 
 void Widget::setVisible(bool visible) {
     if (visible) {
-        lv_obj_add_flag(obj(), LV_OBJ_FLAG_HIDDEN);
-    } else {
         lv_obj_clear_flag(obj(), LV_OBJ_FLAG_HIDDEN);
+    } else {
+        lv_obj_add_flag(obj(), LV_OBJ_FLAG_HIDDEN);
     }
 }
 
 bool Widget::isVisible() {
-    return lv_obj_has_flag(obj(), LV_OBJ_FLAG_HIDDEN);
+    return !lv_obj_has_flag(obj(), LV_OBJ_FLAG_HIDDEN);
 }
 
 lv_img_dsc_t Widget::toLVImage(const uint32_t* pix, int width, int height) {
