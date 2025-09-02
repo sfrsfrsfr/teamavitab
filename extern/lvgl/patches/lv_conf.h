@@ -355,20 +355,6 @@
 /*Extend the default -32k..32k coordinate range to -4M..4M by using int32_t for coordinates instead of int16_t*/
 #define LV_USE_LARGE_COORD 0
 
-/*================
- *  THEME USAGE
- *================*/
-#define LV_THEME_LIVE_UPDATE    1   /*1: Allow theme switching at run time. Uses 8..10 kB of RAM*/
-
-#define LV_USE_THEME_TEMPL      0   /*Just for test*/
-#define LV_USE_THEME_DEFAULT    1   /*Built mainly from the built-in styles. Consumes very few RAM*/
-#define LV_USE_THEME_ALIEN      1   /*Dark futuristic theme*/
-#define LV_USE_THEME_NIGHT      1   /*Dark elegant theme*/
-#define LV_USE_THEME_MONO       1   /*Mono color theme for monochrome displays*/
-#define LV_USE_THEME_MATERIAL   1   /*Flat theme with bold colors and light shadows*/
-#define LV_USE_THEME_ZEN        1   /*Peaceful, mainly light theme */
-#define LV_USE_THEME_NEMO       1   /*Water-like theme based on the movie "Finding Nemo"*/
-
 /*==================
  *   FONT USAGE
  *===================*/
@@ -756,7 +742,7 @@
  *==================*/
 
 /*Enable the examples to be built with the library*/
-#define LV_BUILD_EXAMPLES 1
+#define LV_BUILD_EXAMPLES 0
 
 /*===================
  * DEMO USAGE
@@ -793,7 +779,6 @@
 
 /*--END OF LV_CONF_H--*/
 
-/*Be sure every define has a default value*/
-#include "src/lv_conf_checker.h"
-
 #endif /*LV_CONF_H*/
+
+#endif /*End of "Content enable"*/
