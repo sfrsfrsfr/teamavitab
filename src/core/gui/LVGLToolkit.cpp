@@ -55,6 +55,7 @@ LVGLToolkit::LVGLToolkit(std::shared_ptr<UiDriverBase> drv):
     // if keepAlive if true, the window was hidden without us noticing
     // so it's enough to re-create it without starting rendering again
     mainScreen = std::make_shared<Screen>();
+    mainScreen->setScrollable(false);
     guiActive = true;
     guiThread = std::make_unique<std::thread>(&LVGLToolkit::guiLoop, this);
 }
