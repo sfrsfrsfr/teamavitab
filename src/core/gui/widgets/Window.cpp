@@ -38,32 +38,27 @@ void Window::setCaption(const std::string& title) {
     lv_win_add_title(obj(), title.c_str());
 }
 
-/* FIXME
 void Window::hideScrollbars() {
-    lv_win_set_sb_mode(obj(), LV_SB_MODE_OFF);
+    lv_obj_clear_flag(obj(), LV_OBJ_FLAG_SCROLLABLE);
 }
 
 void Window::getHeaderArea(int &x1, int &y1, int &x2, int &y2) {
-    auto area = obj()->coords;
+    auto header = lv_win_get_header(obj());
+    auto area = header->coords;
     x1 = area.x1;
     y1 = area.y1;
     x2 = area.x2;
-    lv_win_ext_t * ext = reinterpret_cast<lv_win_ext_t *>(lv_obj_get_ext_attr(obj()));
-    auto h = lv_obj_get_height(ext->header);
-    y2 = area.y1 + h;
+    y2 = area.y1 + lv_obj_get_height(header);
 }
- */
 
 int Window::getContentWidth() {
-    return lv_obj_get_width(obj()) - 5;
+    return lv_obj_get_content_width(obj());
 }
 
-/* FIXME
 int Window::getContentHeight() {
-    lv_win_ext_t *ext = reinterpret_cast<lv_win_ext_t *>(lv_obj_get_ext_attr(obj()));
-    return lv_obj_get_height(ext->page) - 6;
+    return lv_obj_get_content_height(obj());
 }
-*/
+
 void Window::setOnClose(WindowCallback cb) {
     addSymbol(Symbol::CLOSE, cb);
 }
