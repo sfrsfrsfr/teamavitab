@@ -27,9 +27,9 @@ namespace avitab {
 
 namespace {
 bool lvglIsInitialized = false;
-static lv_disp_draw_buf_t lvDispBuf;
-static lv_disp_drv_t lvDriver;
-static lv_indev_drv_t inputDriver;
+lv_disp_draw_buf_t lvDispBuf;
+lv_disp_drv_t lvDriver;
+lv_indev_drv_t inputDriver;
 std::vector<uint32_t> tmpBuffer;
 }
 
