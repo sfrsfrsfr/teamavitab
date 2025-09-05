@@ -56,8 +56,6 @@ public:
 private:
     static const int INITIAL_WIDTH = 800;
     static const int INITIAL_HEIGHT = 480;
-    static const int MAX_HOR_RES = 2047;
-    static const int MAX_VER_RES = 2047;
 
     MouseWheelCallback onMouseWheel;
     std::recursive_mutex guiMutex;

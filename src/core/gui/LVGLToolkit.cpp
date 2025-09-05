@@ -64,7 +64,8 @@ void LVGLToolkit::initDisplayDriver() {
     static_assert(sizeof(lv_color_t) == sizeof(uint32_t), "Invalid lvgl color type");
     bool isUpdate = (lvDriver.draw_buf != nullptr);
 
-    tmpBuffer.resize(MAX_HOR_RES * MAX_VER_RES);
+    //FIXME 2047
+    tmpBuffer.resize(2047 * 2047);
     lv_disp_draw_buf_init(&lvDispBuf, tmpBuffer.data(), nullptr, tmpBuffer.size());
 
     lv_disp_drv_init(&lvDriver);
@@ -91,8 +92,9 @@ void LVGLToolkit::initDisplayDriver() {
 
     driver->setResizeCallback([this] (int w, int h) {
         executeLater([w, h] {
-            lvDriver.hor_res = std::min(w, MAX_HOR_RES);
-            lvDriver.ver_res = std::min(h, MAX_VER_RES);
+            //FIXME 2047
+            lvDriver.hor_res = std::min(w, 2047);
+            lvDriver.ver_res = std::min(h, 2047);
             lv_disp_drv_update(lv_disp_get_default(), &lvDriver);
         });
     });
