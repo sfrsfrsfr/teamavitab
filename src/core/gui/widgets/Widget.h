@@ -64,6 +64,10 @@ public:
     int getY();
     void setVisible(bool visible);
     bool isVisible();
+    void setScrollable(bool visible);
+    bool isScrollable();
+    void setBGColor (lv_color_t color);
+    void setBGTransparent();
     void invalidate();
 
     // For internal use by other widgets

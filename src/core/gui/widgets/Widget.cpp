@@ -135,6 +135,27 @@ bool Widget::isVisible() {
     return !lv_obj_has_flag(obj(), LV_OBJ_FLAG_HIDDEN);
 }
 
+void Widget::setScrollable(bool scrollable) {
+    if (scrollable) {
+        lv_obj_add_flag(obj(), LV_OBJ_FLAG_SCROLLABLE);
+        //lv_obj_set_scrollbar_mode();
+    } else {
+        lv_obj_clear_flag(obj(), LV_OBJ_FLAG_SCROLLABLE);
+    }
+}
+
+bool Widget::isScrollable() {
+    return lv_obj_has_flag(obj(), LV_OBJ_FLAG_SCROLLABLE);
+}
+
+void Widget::setBGColor (lv_color_t color) {
+    lv_obj_set_style_bg_color(obj(), color, LV_PART_MAIN);
+}
+
+void Widget::setBGTransparent () {
+    lv_obj_set_style_bg_opa(obj(), LV_OPA_TRANSP, 0);
+}
+
 lv_img_dsc_t Widget::toLVImage(const uint32_t* pix, int width, int height) {
     lv_img_dsc_t res;
 
