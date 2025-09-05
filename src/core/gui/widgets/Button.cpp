@@ -85,11 +85,11 @@ Button::Button(WidgetPtr parent, lv_obj_t* obj):
     setManagedObj(obj);
 }
 
-/* FIXME
 void Button::setFit(bool hor, bool vert) {
-    lv_cont_set_fit2(obj(), hor, vert);
+// FIXME
+//    lv_cont_set_fit2(obj(), hor, vert);
 }
-*/
+
 void Button::setCallback(ButtonCallback cb) {
     callbackFunc = cb;
     lv_obj_set_user_data(obj(), this);
