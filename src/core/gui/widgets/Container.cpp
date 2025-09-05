@@ -34,6 +34,35 @@ Container::Container():
     lv_obj_clear_flag(cont, LV_OBJ_FLAG_SCROLLABLE);
     setObj(cont);
 }
+
+void Container::setLayoutFlex() {
+    lv_obj_set_flex_flow(obj(), LV_FLEX_FLOW_ROW_WRAP);
+    lv_obj_align(obj(), LV_FLEX_ALIGN_SPACE_BETWEEN, 0, 0);
+    lv_obj_set_flex_align(obj(),  LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
+}
+
+void Container::setLayoutGrid() {
+    lv_obj_set_layout(obj(), LV_LAYOUT_GRID);
+}
+
+void Container::setGridArray(std::vector<lv_coord_t> cols, std::vector<lv_coord_t> rows) {
+    lv_coord_t col_dsc[cols.size() + 1];
+    lv_coord_t row_dsc[rows.size() + 1];
+
+    std::transform(cols.begin(),cols.end(),col_dsc,[](const lv_coord_t& x){
+	return x;
+    });
+    col_dsc[sizeof(col_dsc) - 1] = LV_GRID_TEMPLATE_LAST;
+
+    std::transform(rows.begin(),rows.end(),row_dsc,[](const lv_coord_t& x){
+	return x;
+    });
+    row_dsc[sizeof(row_dsc) - 1] = LV_GRID_TEMPLATE_LAST;
+
+    lv_obj_set_size(obj(), LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+    lv_obj_set_grid_dsc_array(obj(), col_dsc, row_dsc);
+}
+
 /* FIXME
 void Container::setLayoutRightColumns() {
     lv_obj_set_layout(obj(), LV_LAYOUT_COLUMN_RIGHT);

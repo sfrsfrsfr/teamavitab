@@ -32,6 +32,9 @@ public:
 
     Container(); // on top layer
     Container(WidgetPtr parent);
+    void setLayoutFlex();
+    void setLayoutGrid();
+    void setGridArray(std::vector<lv_coord_t> cols, std::vector<lv_coord_t> rows);
 /* FIXME
     void setLayoutPretty();
     void setLayoutRightColumns();
