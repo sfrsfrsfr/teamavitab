@@ -44,21 +44,26 @@ Button::Button(WidgetPtr parent, img::Image &&icon, const std::string& caption, 
     lv_img_cache_invalidate_src(&iconImage);
 
     lv_obj_t *button = lv_btn_create(parentObj());
+    lv_obj_set_height(button, LV_SIZE_CONTENT);
+
+    if (width >=0) {
+        lv_obj_set_width(button, width);
+    }
 
     lv_obj_t *cont = lv_obj_create(button);
     lv_obj_remove_style_all(cont);
-    lv_obj_set_style_bg_opa(cont, LV_OPA_TRANSP, 0);
     lv_obj_clear_flag(cont, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_set_style_bg_opa(cont, LV_OPA_TRANSP, 0);
 
     lv_obj_t *ico = lv_img_create(cont);
+    lv_obj_clear_flag(ico, LV_OBJ_FLAG_CLICKABLE);
     lv_img_set_src(ico, &iconImage);
     lv_obj_align(ico, LV_ALIGN_TOP_MID, 0, 0);
-    lv_obj_clear_flag(ico, LV_OBJ_FLAG_CLICKABLE);
 
     lv_obj_t *label = lv_label_create(cont);
+    lv_obj_clear_flag(label, LV_OBJ_FLAG_CLICKABLE);
     lv_label_set_text(label, caption.c_str());
     lv_obj_align(label, LV_ALIGN_BOTTOM_MID, 0, 2);
-    lv_obj_clear_flag(label, LV_OBJ_FLAG_CLICKABLE);
 
  /* FIXME
     if (width >= 0) {
