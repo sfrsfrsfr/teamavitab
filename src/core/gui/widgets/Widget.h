@@ -43,6 +43,11 @@ public:
     void setParent(WidgetPtr newParent);
     void setPosition(int x, int y);
     void setDimensions(int width, int height);
+    void setWidth(int width);
+    void setHeight(int height);
+    void setDimensionsPct(int width, int height);
+    void setWidthPct(int width);
+    void setHeightPct(int width);
     void setClickable(bool click);
     void setClickHandler(ClickHandler handler);
     //void enablePanning();

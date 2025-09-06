@@ -67,6 +67,26 @@ void Widget::setDimensions(int width, int height) {
     lv_obj_set_size(obj(), width, height);
 }
 
+void Widget::setWidth(int width) {
+    lv_obj_set_width(lvObj, width);
+}
+
+void Widget::setHeight(int height) {
+    lv_obj_set_height(lvObj, height);
+}
+
+void Widget::setDimensionsPct(int width, int height) {
+    lv_obj_set_size(obj(), lv_pct(width), lv_pct(height));
+}
+
+void Widget::setWidthPct(int width) {
+    lv_obj_set_width(lvObj, lv_pct(width));
+}
+
+void Widget::setHeightPct(int height) {
+    lv_obj_set_height(lvObj, lv_pct(height));
+}
+
 void Widget::centerInParent() {
     lv_obj_align(lvObj, LV_ALIGN_CENTER, 0, 0);
 }
