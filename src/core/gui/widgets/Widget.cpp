@@ -168,8 +168,8 @@ bool Widget::isScrollable() {
     return lv_obj_has_flag(obj(), LV_OBJ_FLAG_SCROLLABLE);
 }
 
-void Widget::setBGColor (lv_color_t color) {
-    lv_obj_set_style_bg_color(obj(), color, LV_PART_MAIN);
+void Widget::setBGColor (int color) {
+    lv_obj_set_style_bg_color(obj(), lv_color_hex(color), LV_PART_MAIN);
 }
 
 void Widget::setBGTransparent () {

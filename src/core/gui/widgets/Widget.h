@@ -71,7 +71,7 @@ public:
     bool isVisible();
     void setScrollable(bool visible);
     bool isScrollable();
-    void setBGColor (lv_color_t color);
+    void setBGColor (int color);
     void setBGTransparent();
     void invalidate();
 
