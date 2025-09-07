@@ -72,7 +72,6 @@ void HeaderApp::createSettingsContainer() {
     prefContainer = std::make_shared<Container>();
     prefContainer->setDimensionsPct(50, 50);
     prefContainer->centerInParent();
-    prefContainer->showInFront();
     // FIXME prefContainer->setFit(Container::Fit::TIGHT, Container::Fit::TIGHT);
     prefContainer->setVisible(false);
 

@@ -264,6 +264,9 @@ void AviTab::onPlaneLoad() {
                 }
             }
         }
+        if (centerContainer) {
+            centerContainer->showInBack();
+        }
     });
 }
 
@@ -472,6 +475,7 @@ void AviTab::showGUIContainer(std::shared_ptr<Container> container) {
         centerContainer->setPosition(0, 30);
         centerContainer->setDimensions(screen->getWidth(), screen->getHeight() - 30);
     }
+    centerContainer->showInBack();
     centerContainer->setVisible(true);
 }
 
