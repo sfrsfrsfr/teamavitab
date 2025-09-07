@@ -38,16 +38,17 @@ HeaderApp::HeaderApp(FuncsPtr appFuncs):
     container->setWidthPct(100);
     container->setHeight(30);
     clockLabel = std::make_shared<Label>(container, "");
+    clockLabel->alignRightInParent(0);
     clockLabel->setClickable(true);
     clockLabel->setClickHandler([this] (int x, int y, bool pr, bool rel) { onClockClick(x, y, pr, rel); });
     clockLabel->alignRightInParent(HOR_PADDING);
 
     settingsButton = std::make_shared<Button>(container, Widget::Symbol::SETTINGS);
     settingsButton->setCallback([this] (const Button &) { toggleSettings(); });
-    settingsButton->alignLeftInParent(HOR_PADDING);
+    settingsButton->alignLeftInParent(0);
 
     fpsLabel = std::make_shared<Label>(container, "-- FPS");
-    fpsLabel->alignRightOf(settingsButton);
+    fpsLabel->alignRightOf(settingsButton, HOR_PADDING);
     fpsLabel->setVisible(showFps);
 
     homeButton = std::make_shared<Button>(container, Widget::Symbol::HOME);
