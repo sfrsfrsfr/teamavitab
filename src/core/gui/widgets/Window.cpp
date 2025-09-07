@@ -38,6 +38,12 @@ void Window::setCaption(const std::string& title) {
     lv_win_add_title(obj(), title.c_str());
 }
 
+void Window::add(WidgetPtr content) {
+    // FIXME
+    //content->setParent(this);
+    lv_obj_set_parent(content->obj(), lv_win_get_content(obj()));
+}
+
 void Window::hideScrollbars() {
     lv_obj_clear_flag(obj(), LV_OBJ_FLAG_SCROLLABLE);
 }

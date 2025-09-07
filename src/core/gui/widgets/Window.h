@@ -31,6 +31,7 @@ public:
 
     Window(WidgetPtr parent, const std::string &title);
     void setCaption(const std::string &title);
+    void add(WidgetPtr content);
     void setOnClose(WindowCallback cb);
     void hideScrollbars();
     void getHeaderArea(int &x1, int &y1, int &x2, int &y2);
