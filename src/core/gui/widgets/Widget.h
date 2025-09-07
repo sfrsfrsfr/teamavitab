@@ -43,6 +43,7 @@ public:
     void setParent(WidgetPtr newParent);
     void setPosition(int x, int y);
     void showInFront();
+    void showInBack();
     void setDimensions(int width, int height);
     void setWidth(int width);
     void setHeight(int height);

@@ -55,7 +55,11 @@ void Widget::setPosition(int x, int y) {
 }
 
 void Widget::showInFront() {
-    lv_obj_set_parent(obj(), lv_layer_top());
+    lv_obj_move_foreground(obj());
+}
+
+void Widget::showInBack() {
+    lv_obj_move_background(obj());
 }
 
 void Widget::setClickable(bool click) {
