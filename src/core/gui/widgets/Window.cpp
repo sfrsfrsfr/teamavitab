@@ -30,7 +30,7 @@ Window::Window(WidgetPtr parent, const std::string& title):
 
     setObj(win);
 
-    setDimensions(parent->getWidth() - 10, parent->getHeight());
+    setDimensionsPct(95, 100);
     centerInParent();
 }
 
