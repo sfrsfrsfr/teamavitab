@@ -54,6 +54,10 @@ void Widget::setPosition(int x, int y) {
     lv_obj_set_pos(obj(), x, y);
 }
 
+void Widget::showInFront() {
+    lv_obj_set_parent(obj(), lv_layer_top());
+}
+
 void Widget::setClickable(bool click) {
     if (click) {
         lv_obj_add_flag(obj(), LV_OBJ_FLAG_CLICKABLE);
