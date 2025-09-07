@@ -39,6 +39,7 @@ public:
     int getContentHeight();
     std::shared_ptr<Button> addSymbol(Symbol smb, WindowCallback cb);
 private:
+    lv_obj_t *caption;
     lv_style_t scrlStyle;
     std::map<Symbol, WindowCallback> callbacks;
 };

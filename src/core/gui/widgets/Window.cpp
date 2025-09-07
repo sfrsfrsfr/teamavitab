@@ -25,7 +25,7 @@ Window::Window(WidgetPtr parent, const std::string& title):
 {
     // FIXME header height 20
     lv_obj_t *win = lv_win_create(parentObj(), 20);
-    lv_win_add_title(win, title.c_str());
+    caption = lv_win_add_title(win, title.c_str());
     lv_obj_set_user_data(win, this);
 
     setObj(win);
@@ -35,7 +35,7 @@ Window::Window(WidgetPtr parent, const std::string& title):
 }
 
 void Window::setCaption(const std::string& title) {
-    lv_win_add_title(obj(), title.c_str());
+    lv_label_set_text(caption, title.c_str());
 }
 
 void Window::add(WidgetPtr content) {
