@@ -69,7 +69,7 @@ void HeaderApp::createSettingsContainer() {
     auto ui = getUIContainer();
 
     prefContainer = std::make_shared<Container>();
-    prefContainer->setDimensions(ui->getWidth() / 2, ui->getHeight() / 2);
+    prefContainer->setDimensionsPct(50, 50);
     prefContainer->centerInParent();
     prefContainer->showInFront();
     // FIXME prefContainer->setFit(Container::Fit::TIGHT, Container::Fit::TIGHT);
