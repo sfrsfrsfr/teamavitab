@@ -59,7 +59,6 @@ void Widget::setClickable(bool click) {
         lv_obj_add_flag(obj(), LV_OBJ_FLAG_CLICKABLE);
     } else {
         lv_obj_clear_flag(obj(), LV_OBJ_FLAG_CLICKABLE);
-
     }
 }
 
