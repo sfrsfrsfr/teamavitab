@@ -52,6 +52,9 @@ AppLauncher::AppLauncher(FuncsPtr appFuncs):
 }
 
 void AppLauncher::onScreenResize(int width, int height) {
+    // FIXME check IsInMenu ?
+    auto cont = getUIContainer();
+    cont->setHeight(height);
     for (auto &entry: entries) {
         entry.app->onScreenResize(width, height);
     }

@@ -35,8 +35,8 @@ HeaderApp::HeaderApp(FuncsPtr appFuncs):
 
     auto container = getUIContainer();
     container->setPosition(0, 0);
-    container->setDimensions(container->getWidth(), 30);
-
+    container->setWidthPct(100);
+    container->setHeight(30);
     clockLabel = std::make_shared<Label>(container, "");
     clockLabel->setClickable(true);
     clockLabel->setClickHandler([this] (int x, int y, bool pr, bool rel) { onClockClick(x, y, pr, rel); });
