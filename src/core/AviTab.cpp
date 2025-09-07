@@ -254,7 +254,6 @@ void AviTab::onPlaneLoad() {
             if (!headerApp) {
                 headerApp = std::make_shared<HeaderApp>(this);
                 headContainer = headerApp->getUIContainer();
-                headContainer->setParent(screen);
                 headContainer->setVisible(true);
                 // FIXME
                 //headContainer->setFit(Container::Fit::FILL, Container::Fit::OFF);
@@ -396,7 +395,6 @@ void AviTab::createLayout() {
         if (!headerApp) {
             headerApp = std::make_shared<HeaderApp>(this);
             headContainer = headerApp->getUIContainer();
-            headContainer->setParent(screen);
             headContainer->setVisible(true);
         }
     }
@@ -465,7 +463,6 @@ void AviTab::showGUIContainer(std::shared_ptr<Container> container) {
 
     auto screen = guiLib->screen();
     centerContainer = container;
-    centerContainer->setParent(screen);
     if (hideHeader) {
         centerContainer->setPosition(0, 0);
         centerContainer->setDimensions(screen->getWidth(), screen->getHeight());

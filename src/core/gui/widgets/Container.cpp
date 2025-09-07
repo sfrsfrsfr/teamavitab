@@ -30,7 +30,7 @@ Container::Container(WidgetPtr parent):
 Container::Container():
     Widget(nullptr)
 {
-    lv_obj_t *cont = lv_obj_create(lv_layer_top());
+    lv_obj_t *cont = lv_obj_create(lv_scr_act());
     lv_obj_clear_flag(cont, LV_OBJ_FLAG_SCROLLABLE);
     setObj(cont);
 }
