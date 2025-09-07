@@ -80,7 +80,7 @@ std::shared_ptr<Button> Window::addSymbol(Symbol smb, WindowCallback cb) {
     lv_obj_t *btn = lv_win_add_btn(obj(), lvSymbol, 20);
     lv_obj_add_event_cb(btn, [] (lv_event_t *e) {
         lv_obj_t *btn = lv_event_get_target(e);
-        lv_obj_t *winObj = lv_obj_get_parent(btn);
+        lv_obj_t *winObj = lv_obj_get_parent(lv_obj_get_parent(btn));
         Window *winCls = reinterpret_cast<Window *>(lv_obj_get_user_data(winObj));
         int smbInt = reinterpret_cast<intptr_t>(lv_obj_get_user_data(btn));
 
