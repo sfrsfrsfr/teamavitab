@@ -233,6 +233,7 @@ void RouteApp::showError(const std::string& msg) {
             errorMessage.reset();
         });
     });
+    errorMessage->centerInParent();
 }
 
 void RouteApp::showStatus(const std::string& msg) {
