@@ -20,11 +20,10 @@
 
 namespace avitab {
 
-Window::Window(WidgetPtr parent, const std::string& title):
+Window::Window(WidgetPtr parent, const std::string& title, const int height):
     Widget(parent)
 {
-    // FIXME header height 20
-    lv_obj_t *win = lv_win_create(parentObj(), 20);
+    lv_obj_t *win = lv_win_create(parentObj(), height);
     caption = lv_win_add_title(win, title.c_str());
     lv_obj_set_user_data(win, this);
 

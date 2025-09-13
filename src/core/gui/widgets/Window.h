@@ -29,7 +29,7 @@ class Window: public Widget {
 public:
     using WindowCallback = std::function<void()>;
 
-    Window(WidgetPtr parent, const std::string &title);
+    Window(WidgetPtr parent, const std::string &title, const int height = 20);
     void setCaption(const std::string &title);
     void add(WidgetPtr content);
     void setOnClose(WindowCallback cb);
