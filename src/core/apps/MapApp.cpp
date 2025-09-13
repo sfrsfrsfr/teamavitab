@@ -31,7 +31,7 @@ namespace avitab {
 
 MapApp::MapApp(FuncsPtr funcs):
     App(funcs),
-    window(std::make_shared<Window>(getUIContainer(), "", 25)),
+    window(std::make_shared<Window>(getUIContainer(), "")),
     savedSettings(funcs->getSettings()),
     updateTimer(std::bind(&MapApp::onTimer, this), 200)
 {
