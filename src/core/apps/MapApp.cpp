@@ -38,15 +38,15 @@ MapApp::MapApp(FuncsPtr funcs):
     overlayConf = api().getSettings()->getOverlayConfig();
     mapConf = api().getSettings()->getMapConfig();
 
-    window->setOnClose([this] () { exit(); });
-    window->addSymbol(Widget::Symbol::LIST, std::bind(&MapApp::onSettingsButton, this));
-    window->addSymbol(Widget::Symbol::SETTINGS, std::bind(&MapApp::onOverlaysButton, this));
-    window->addSymbol(Widget::Symbol::MINUS, std::bind(&MapApp::onMinusButton, this));
-    window->addSymbol(Widget::Symbol::PLUS, std::bind(&MapApp::onPlusButton, this));
-    trackButton = window->addSymbol(Widget::Symbol::GPS, std::bind(&MapApp::onTrackButton, this));
-    trackButton->setToggleState(trackPlane);
     rotateButton = window->addSymbol(Widget::Symbol::ROTATE, std::bind(&MapApp::onRotate, this));
     rotateButton->setVisible(false);
+    trackButton = window->addSymbol(Widget::Symbol::GPS, std::bind(&MapApp::onTrackButton, this));
+    trackButton->setToggleState(trackPlane);
+    window->addSymbol(Widget::Symbol::PLUS, std::bind(&MapApp::onPlusButton, this));
+    window->addSymbol(Widget::Symbol::MINUS, std::bind(&MapApp::onMinusButton, this));
+    window->addSymbol(Widget::Symbol::SETTINGS, std::bind(&MapApp::onOverlaysButton, this));
+    window->addSymbol(Widget::Symbol::LIST, std::bind(&MapApp::onSettingsButton, this));
+    window->setOnClose([this] () { exit(); });
     // FIXME
     //mapImage = std::make_shared<img::Image>(window->getContentWidth(), window->getContentHeight(), img::COLOR_TRANSPARENT);
     mapImage = std::make_shared<img::Image>(window->getContentWidth(), 300, img::COLOR_TRANSPARENT);
