@@ -47,9 +47,8 @@ MapApp::MapApp(FuncsPtr funcs):
     window->addSymbol(Widget::Symbol::SETTINGS, std::bind(&MapApp::onOverlaysButton, this));
     window->addSymbol(Widget::Symbol::LIST, std::bind(&MapApp::onSettingsButton, this));
     window->setOnClose([this] () { exit(); });
-    // FIXME
-    //mapImage = std::make_shared<img::Image>(window->getContentWidth(), window->getContentHeight(), img::COLOR_TRANSPARENT);
-    mapImage = std::make_shared<img::Image>(window->getContentWidth(), 300, img::COLOR_TRANSPARENT);
+
+    mapImage = std::make_shared<img::Image>(window->getContentWidth(), window->getContentHeight(), img::COLOR_TRANSPARENT);
 
     mapWidget = std::make_shared<PixMap>(window);
     mapWidget->setClickable(true);

@@ -66,7 +66,7 @@ void DocumentsApp::createBrowseTab() {
     browseWindow->addSymbol(Widget::Symbol::DOWN, [this] () { onDown(); });
     browseWindow->addSymbol(Widget::Symbol::UP, [this] () { onUp(); });
     list = std::make_shared<List>(browseWindow);
-//    list->setDimensions(browseWindow->getContentWidth(), browseWindow->getContentHeight());
+    list->setDimensions(browseWindow->getContentWidth(), browseWindow->getContentHeight());
     list->setCallback([this] (int data) {
         api().executeLater([this, data] {
             onSelect(data);
@@ -155,9 +155,7 @@ void DocumentsApp::createDocumentTab(const std::filesystem::path &docPath) {
     tab->window->alignInTopLeft();
 
     tab->pixMap = std::make_shared<PixMap>(tab->window);
-    // FIXME
-    //tab->rasterImage = std::make_shared<img::Image>(tab->window->getContentWidth(), tab->window->getContentHeight(), img::COLOR_TRANSPARENT);
-    tab->rasterImage = std::make_shared<img::Image>(tab->window->getContentWidth(), 300, img::COLOR_TRANSPARENT);
+    tab->rasterImage = std::make_shared<img::Image>(tab->window->getContentWidth(), tab->window->getContentHeight(), img::COLOR_TRANSPARENT);
     tab->pixMap->setClickable(true);
     tab->pixMap->setClickHandler([this] (int x, int y, bool pr, bool rel) { onPan(x, y, pr, rel); });
     tab->pixMap->draw(*tab->rasterImage);
