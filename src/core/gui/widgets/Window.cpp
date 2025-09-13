@@ -57,10 +57,12 @@ void Window::getHeaderArea(int &x1, int &y1, int &x2, int &y2) {
 }
 
 int Window::getContentWidth() {
+    lv_obj_update_layout(obj());
     return lv_obj_get_content_width(obj());
 }
 
 int Window::getContentHeight() {
+    lv_obj_update_layout(obj());
     return lv_obj_get_content_height(obj());
 }
 

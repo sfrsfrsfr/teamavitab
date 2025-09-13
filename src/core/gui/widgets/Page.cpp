@@ -41,10 +41,12 @@ void Page::clear() {
 }
 
 int Page::getContentWidth() {
+    lv_obj_update_layout(obj());
     return lv_obj_get_width(obj());
 }
 
 int Page::getContentHeight() {
+    lv_obj_update_layout(obj());
     return lv_obj_get_height(obj());
 }
 /* FIXME

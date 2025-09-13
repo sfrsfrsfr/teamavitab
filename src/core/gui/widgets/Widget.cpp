@@ -143,10 +143,12 @@ void Widget::alignBelow(WidgetPtr base, int yPad) {
 }
 
 int Widget::getWidth() {
+    lv_obj_update_layout(obj());
     return lv_obj_get_width(obj());
 }
 
 int Widget::getHeight() {
+    lv_obj_update_layout(obj());
     return lv_obj_get_height(obj());
 }
 
