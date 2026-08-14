@@ -718,21 +718,22 @@ void MapApp::onRotate() {
 }
 
 void MapApp::startCalibration() {
+    std::vector<std::string> buttons = { "Ok" };
     messageBox = std::make_unique<avitab::MessageBox>(
             getUIContainer(),
                 "The current file is not yet calibrated.\n\n"
                 "Please follow the instructions in the github teamavitab/avitab wiki to calibrate.\n"
                 "To fill the field with the current aircraft coordinates, clear the field and press the tracking button.\n",
-                "Ok",
-                [this] () {
-                    api().executeLater([this] () {
-                        messageBox.reset();
-                        rotateButton->setVisible(true);
-                        if (map) {
-                            map->beginCalibration();
-                        }
-                    });
+            buttons);
+    messageBox->setCallback([this] (int idx) {
+            api().executeLater([this] () {
+                messageBox.reset();
+                rotateButton->setVisible(true);
+                if (map) {
+                    map->beginCalibration();
                 }
+            });
+        }
     );
     messageBox->centerInParent();
 
@@ -840,11 +841,12 @@ void MapApp::processCalibrationPoint(int step) {
 void MapApp::finalizeCalibration(std::string msg) {
     keyboard.reset();
     coordsField.reset();
-    messageBox = std::make_unique<avitab::MessageBox>(getUIContainer(), msg, "Ok",
-        [this] () {
-            api().executeLater([this] () {
-                messageBox.reset();
-            });
+    std::vector<std::string> buttons = { "Ok" };
+    messageBox = std::make_unique<avitab::MessageBox>(getUIContainer(), msg, buttons);
+    messageBox->setCallback([this] (int idx) {
+        api().executeLater([this] () {
+            messageBox.reset();
+        });
     });
     messageBox->centerInParent();
     onTimer();

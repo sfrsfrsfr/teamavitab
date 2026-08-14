@@ -226,7 +226,9 @@ void RouteApp::reset() {
 }
 
 void RouteApp::showError(const std::string& msg) {
-    errorMessage = std::make_shared<MessageBox>(getUIContainer(), msg, "Ok", [this] () {
+    std::vector<std::string> buttons = { "Ok" };
+    errorMessage = std::make_shared<MessageBox>(getUIContainer(), msg, buttons);
+    errorMessage->setCallback([this] (int idx) {
         api().executeLater([this] () {
             errorMessage.reset();
         });
