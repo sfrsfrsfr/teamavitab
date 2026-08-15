@@ -130,7 +130,7 @@ void Widget::alignInTopRight(int xPad) {
     lv_obj_align(lvObj, LV_ALIGN_TOP_RIGHT, -xPad, 0);
 }
 
-void Widget::alignLeftOf(WidgetPtr base) {
+void Widget::alignLeftOf(WidgetPtr base, int xPad) {
     lv_obj_align_to(lvObj, base->obj(), LV_ALIGN_OUT_LEFT_MID, 0, 0);
 }
 
