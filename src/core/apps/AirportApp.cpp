@@ -571,7 +571,8 @@ void AirportApp::createSettingsContainer() {
     prefContainer = std::make_shared<Container>();
     prefContainer->setDimensions(ui->getWidth() / 8, ui->getHeight() / 2);
     prefContainer->alignTopRightInParent(10, 127);
-    prefContainer->setFit(Container::Fit::TIGHT, Container::Fit::TIGHT);
+    // FIXME
+    //prefContainer->setFit(Container::Fit::TIGHT, Container::Fit::TIGHT);
     prefContainer->setVisible(false);
 
     sortLabel = std::make_shared<Label>(prefContainer, "Sort options");
