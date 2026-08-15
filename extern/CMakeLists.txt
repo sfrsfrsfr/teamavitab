@@ -34,7 +34,7 @@ PrepareExternPackages(
     jpeg        "https://www.ijg.org/files/jpegsrc.v9f.tar.gz"
     openjpeg    "https://github.com/uclouvain/openjpeg/archive/refs/tags/v2.5.3.tar.gz"
     glfw        "https://github.com/glfw/glfw/archive/refs/tags/3.4.tar.gz"
-    lvgl        "https://github.com/lvgl/lvgl/archive/refs/tags/v6.1.2.tar.gz"
+    lvgl        "https://github.com/lvgl/lvgl/archive/refs/tags/v8.4.0.tar.gz"
 
     # Remaining packages have dependencies, so order matters.
 
