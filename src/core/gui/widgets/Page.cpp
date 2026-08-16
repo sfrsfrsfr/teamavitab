@@ -23,6 +23,8 @@ Page::Page(WidgetPtr parent):
     Widget(parent)
 {
     lv_obj_t *page = lv_obj_create(parentObj());
+    lv_obj_set_style_pad_hor(page, 0 , 0);
+    lv_obj_set_style_pad_ver(page, 0 , 0);
     setObj(page);
 }
 
@@ -30,6 +32,9 @@ Page::Page(WidgetPtr parent, lv_obj_t *page):
     Widget(parent)
 {
     setManagedObj(page);
+
+    lv_obj_set_style_pad_hor(page, 0 , 0);
+    lv_obj_set_style_pad_ver(page, 0 , 0);
 }
 
 void Page::setShowScrollbar(bool show) {
