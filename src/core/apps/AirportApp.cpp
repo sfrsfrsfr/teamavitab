@@ -48,8 +48,8 @@ void AirportApp::resetLayout() {
     searchWindow = std::make_shared<Window>(searchPage, "Search");
     searchWindow->setDimensions(searchPage->getContentWidth(), searchPage->getHeight());
     searchWindow->centerInParent();
-    searchWindow->setOnClose([this] { prefContainer->setVisible(false); exit(); });
     searchWindow->addSymbol(Widget::Symbol::SETTINGS, std::bind(&AirportApp::toggleSettings, this));
+    searchWindow->setOnClose([this] { prefContainer->setVisible(false); exit(); });
 
     searchField = std::make_shared<TextArea>(searchWindow, "");
     searchField->alignInTopLeft();
@@ -146,14 +146,15 @@ void AirportApp::onAirportSelected(std::shared_ptr<navdb::Airport> airport) {
     tab.window->alignInTopLeft();
 
     auto page = tab.page;
-    tab.window->setOnClose([this, page] {
-        api().executeLater([this, page] {
-            removeTab(page);
-        });
-    });
 
     tab.label = std::make_shared<Label>(tab.window, "");
     tab.label->setLongMode(true);
+
+    tab.window->addSymbol(Widget::Symbol::LIST, [this, airport, page] {
+        api().executeLater([this, airport, page] {
+            toggleCharts(page, airport);
+        });
+    });
 
     tab.window->addSymbol(Widget::Symbol::REFRESH, [this, page, airport] {
         TabPage &tab = findPage(page);
@@ -162,9 +163,9 @@ void AirportApp::onAirportSelected(std::shared_ptr<navdb::Airport> airport) {
         }
     });
 
-    tab.window->addSymbol(Widget::Symbol::LIST, [this, airport, page] {
-        api().executeLater([this, airport, page] {
-            toggleCharts(page, airport);
+    tab.window->setOnClose([this, page] {
+        api().executeLater([this, page] {
+            removeTab(page);
         });
     });
 
