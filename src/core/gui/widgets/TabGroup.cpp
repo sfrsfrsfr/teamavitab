@@ -43,12 +43,13 @@ void TabGroup::setCallback(TabChangeCallback cb) {
 }
 
 std::shared_ptr<Page> TabGroup::addTab(WidgetPtr tabs, const std::string &title) {
+    tabCount++;
     lv_obj_t *page = lv_tabview_add_tab(obj(), title.c_str());
 
     auto pageWidget = std::make_shared<Page>(tabs, page);
     return pageWidget;
 }
-/* FIXME
+
 void TabGroup::showTab(WidgetPtr tab) {
     setActiveTab(getTabIndex(tab));
 }
@@ -56,39 +57,35 @@ void TabGroup::showTab(WidgetPtr tab) {
 void TabGroup::delTab(WidgetPtr tab) {
     removeTab(getTabIndex(tab));
 }
-*/
+
 size_t TabGroup::getTabIndex(WidgetPtr tab) {
-    // FIXME
-    /*
-    size_t cnt = lv_tabview_get_tab_count(obj());
-    for (size_t i = 0; i < cnt; i++) {
-        lv_obj_t *cur = lv_tabview_get_tab(obj(), i);
+    lv_obj_t *content = lv_tabview_get_content(obj());
+    size_t i;
+    for (i = 0; i < lv_obj_get_child_cnt(content); i++) {
+        lv_obj_t *cur = lv_obj_get_child(content, i);
         if (cur == tab->obj()) {
             return i;
         }
     }
-    */
     throw std::runtime_error("Tab not part of tab group");
 }
 
 void TabGroup::setActiveTab(size_t i) {
-    // FIXME
-    //lv_tabview_set_tab_act(obj(), i, true);
+    lv_tabview_set_act(obj(), i, LV_ANIM_ON);
 }
 
 size_t TabGroup::getActiveTab() {
-    // FIXME
-    //return lv_tabview_get_tab_act(obj());
-    size_t a = 0;
-    return a;
+    return lv_tabview_get_tab_act(obj());
 }
 
 size_t TabGroup::getTabCount() {
-    return lv_tabview_get_tab_count(obj());
+    return tabCount;
 }
 
 void TabGroup::removeTab(size_t i) {
     // FIXME
+    return;
+    tabCount--;
     /*
     lv_tabview_ext_t *ext = reinterpret_cast<lv_tabview_ext_t *>(lv_obj_get_ext_attr(obj()));
 
@@ -110,8 +107,7 @@ void TabGroup::removeTab(size_t i) {
 
     lv_obj_t *page = lv_tabview_get_tab(obj(), i);
     lv_obj_del(page);
-*/
-/*
+
     const lv_style_t * style_tabs = lv_obj_get_style(ext->btns);
     lv_coord_t indic_size = (lv_obj_get_width(obj()) - style_tabs->body.padding.inner * (ext->tab_cnt - 1) -
                  style_tabs->body.padding.left - style_tabs->body.padding.right) /

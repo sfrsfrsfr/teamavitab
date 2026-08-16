@@ -31,7 +31,7 @@ public:
     void setCallback(TabChangeCallback cb);
     std::shared_ptr<Page> addTab(WidgetPtr tabs, const std::string &title);
     size_t getTabIndex(WidgetPtr tab);
-    // FIXME void showTab(WidgetPtr tab);
+    void showTab(WidgetPtr tab);
     void delTab(WidgetPtr tab);
     void setActiveTab(size_t i);
     size_t getActiveTab();
@@ -40,6 +40,7 @@ public:
     void clear();
 private:
     TabChangeCallback callbackFunc;
+    size_t tabCount = 0;
 };
 
 } /* namespace avitab */

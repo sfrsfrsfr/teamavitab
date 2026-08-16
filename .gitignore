@@ -66,3 +66,6 @@ compile_commands.json
 # Eclipse IDE
 .project
 .cproject
+
+# sfr
+keep

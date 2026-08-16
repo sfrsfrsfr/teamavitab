@@ -178,7 +178,7 @@ void DocumentsApp::createDocumentTab(const std::filesystem::path &docPath) {
     }
 
     pages.push_back(tab);
-    // FIXME tabs->showTab(page);
+    tabs->showTab(page);
 }
 
 void DocumentsApp::removeTab(std::shared_ptr<Page> page) {
