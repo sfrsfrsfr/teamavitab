@@ -40,7 +40,6 @@ public:
     void clear();
 private:
     TabChangeCallback callbackFunc;
-    size_t tabCount = 0;
 };
 
 } /* namespace avitab */

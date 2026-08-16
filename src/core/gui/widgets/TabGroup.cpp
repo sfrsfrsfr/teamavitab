@@ -45,7 +45,6 @@ void TabGroup::setCallback(TabChangeCallback cb) {
 }
 
 std::shared_ptr<Page> TabGroup::addTab(WidgetPtr tabs, const std::string &title) {
-    tabCount++;
     lv_obj_t *page = lv_tabview_add_tab(obj(), title.c_str());
 
     auto pageWidget = std::make_shared<Page>(tabs, page);
@@ -81,13 +80,14 @@ size_t TabGroup::getActiveTab() {
 }
 
 size_t TabGroup::getTabCount() {
-    return tabCount;
+    lv_obj_t *content = lv_tabview_get_content(obj());
+    size_t i;
+    return lv_obj_get_child_cnt(content);
 }
 
 void TabGroup::removeTab(size_t i) {
     // FIXME
     return;
-    tabCount--;
     /*
     lv_tabview_ext_t *ext = reinterpret_cast<lv_tabview_ext_t *>(lv_obj_get_ext_attr(obj()));
 
