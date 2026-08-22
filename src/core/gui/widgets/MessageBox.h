@@ -26,15 +26,13 @@ namespace avitab {
 
 class MessageBox: public Widget {
 public:
-    using Callback = std::function<void(int idx)>;
+    using Callback = std::function<void()>;
 
-    MessageBox(WidgetPtr parent, const std::string &text, const std::vector<std::string> &caption);
     MessageBox(WidgetPtr parent, const std::string &text);
-    void setCallback(Callback cb);
-    ~MessageBox();
+    void addButton(const std::string &caption, Callback cb);
 private:
-    std::vector<const char *> buttons;
-    Callback callbackFunc;
+    std::vector<lv_obj_t *> buttons;
+    std::vector<Callback> callbacks;
 };
 
 } /* namespace avitab */

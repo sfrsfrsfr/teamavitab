@@ -32,7 +32,7 @@ Container::Container(WidgetPtr parent):
 Container::Container():
     Widget(nullptr)
 {
-    lv_obj_t *cont = lv_obj_create(lv_scr_act());
+    lv_obj_t *cont = lv_obj_create(lv_screen_active());
     lv_obj_clear_flag(cont, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_style_pad_hor(cont, 2 , 0);
     lv_obj_set_style_pad_ver(cont, 2 , 0);
@@ -41,7 +41,7 @@ Container::Container():
 
 void Container::setLayoutFlex() {
     lv_obj_set_flex_flow(obj(), LV_FLEX_FLOW_ROW_WRAP);
-    lv_obj_align(obj(), LV_FLEX_ALIGN_SPACE_BETWEEN, 0, 0);
+    //lv_obj_align(obj(), LV_FLEX_ALIGN_SPACE_BETWEEN, 0, 0);
     lv_obj_set_flex_align(obj(),  LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
 }
 

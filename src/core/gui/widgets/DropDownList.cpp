@@ -48,7 +48,7 @@ void DropDownList::setSelectAction(SelectCallback cb) {
     onSelect = cb;
 
     lv_obj_add_event_cb(obj(), [] (lv_event_t *e) {
-        lv_obj_t *o = lv_event_get_target(e);
+        lv_obj_t *o = lv_event_get_target_obj(e);
         DropDownList *us = reinterpret_cast<DropDownList *>(lv_obj_get_user_data(o));
         us->onSelect();
     }, LV_EVENT_VALUE_CHANGED, nullptr);

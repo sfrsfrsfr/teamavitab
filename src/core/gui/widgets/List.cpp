@@ -37,12 +37,12 @@ void List::add(const std::string& entry, int data) {
 }
 
 void List::add(const std::string& entry, Symbol smb, int data) {
-    lv_obj_t *btn = lv_list_add_btn(obj(), symbolToLVSymbol(smb), entry.c_str());
+    lv_obj_t *btn = lv_list_add_button(obj(), symbolToLVSymbol(smb), entry.c_str());
     lv_obj_set_user_data(btn, reinterpret_cast<void *>(data));
     lv_group_add_obj(grp, btn);
 
     lv_obj_add_event_cb(btn, [] (lv_event_t *e) {
-        lv_obj_t *o = lv_event_get_target(e);
+        lv_obj_t *o = lv_event_get_target_obj(e);
         lv_obj_t *listObj = lv_obj_get_parent(lv_obj_get_parent(o));
         void *list = lv_obj_get_user_data(listObj);
         if (list) {

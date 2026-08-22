@@ -26,7 +26,9 @@ TabGroup::TabGroup(WidgetPtr parent):
     Widget(parent)
 {
     // FIXME tab_height/tab_width
-    lv_obj_t *tabs = lv_tabview_create(parentObj(), LV_DIR_TOP, 20);
+    lv_obj_t *tabs = lv_tabview_create(parentObj());
+    lv_tabview_set_tab_bar_position(tabs, LV_DIR_TOP);
+    lv_tabview_set_tab_bar_size(tabs, 20);
 
     setObj(tabs);
 }
@@ -36,7 +38,7 @@ void TabGroup::setCallback(TabChangeCallback cb) {
     lv_obj_set_user_data(obj(), this);
 
     lv_obj_add_event_cb(obj(), [] (lv_event_t *e) {
-        lv_obj_t *o = lv_event_get_target(e);
+        lv_obj_t *o = lv_event_get_target_obj(e);
         TabGroup *me = reinterpret_cast<TabGroup *>(lv_obj_get_user_data(o));
         me->callbackFunc();
     }, LV_EVENT_VALUE_CHANGED, nullptr);
@@ -70,11 +72,11 @@ size_t TabGroup::getTabIndex(WidgetPtr tab) {
 }
 
 void TabGroup::setActiveTab(size_t i) {
-    lv_tabview_set_act(obj(), i, LV_ANIM_ON);
+    lv_tabview_set_active(obj(), i, LV_ANIM_ON);
 }
 
 size_t TabGroup::getActiveTab() {
-    return lv_tabview_get_tab_act(obj());
+    return lv_tabview_get_tab_active(obj());
 }
 
 size_t TabGroup::getTabCount() {
@@ -106,7 +108,7 @@ void TabGroup::removeTab(size_t i) {
     lv_btnm_set_map(ext->btns, ext->tab_name_ptr);
 
     lv_obj_t *page = lv_tabview_get_tab(obj(), i);
-    lv_obj_del(page);
+    lv_obj_delete(page);
 
     const lv_style_t * style_tabs = lv_obj_get_style(ext->btns);
     lv_coord_t indic_size = (lv_obj_get_width(obj()) - style_tabs->body.padding.inner * (ext->tab_cnt - 1) -

@@ -48,12 +48,10 @@ void PlaneManualApp::onPlaneLoad() {
 
 void PlaneManualApp::ShowMessage() {
     if (!errorMsg) {
-        std::vector<std::string> buttons = { "Ok" };
         errorMsg = std::make_shared<MessageBox>(
                 getUIContainer(),
-                "It is recommended to put your aircraft's manuals into a dedicated folder inside your aircraft folder.\nAvitab looks for folders:\n'manuals' 'docs' 'handbook'."
-                , buttons);
-        errorMsg->setCallback([this] (int idx) {
+                "It is recommended to put your aircraft's manuals into a dedicated folder inside your aircraft folder.\nAvitab looks for folders:\n'manuals' 'docs' 'handbook'.");
+        errorMsg->addButton("Ok", [this] () {
             api().executeLater([this] () {
                 //Run();
                 errorMsg.reset();

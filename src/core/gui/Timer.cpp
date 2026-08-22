@@ -26,7 +26,7 @@ Timer::Timer(TimerFunc callback, int periodMs):
 {
     logger::verbose("Creating timer in thread %d", std::this_thread::get_id());
     task = lv_timer_create([] (lv_timer_t *tsk) {
-        Timer *tmr = (Timer *)(tsk->user_data);
+        Timer *tmr = (Timer *)(lv_timer_get_user_data(tsk));
         bool wantContinue = tmr->func();
         if (!wantContinue) {
             tmr->stop();
@@ -36,7 +36,7 @@ Timer::Timer(TimerFunc callback, int periodMs):
 
 void Timer::stop() {
     if (task) {
-        lv_timer_del(task);
+        lv_timer_delete(task);
         task = nullptr;
     }
 }

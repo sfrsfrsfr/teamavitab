@@ -24,7 +24,7 @@ namespace avitab {
 Button::Button(WidgetPtr parent, const std::string& text):
     Widget(parent)
 {
-    lv_obj_t *button = lv_btn_create(parentObj());
+    lv_obj_t *button = lv_button_create(parentObj());
     // FIXME
     //lv_cont_set_fit(button, LV_FIT_TIGHT);
 
@@ -41,18 +41,18 @@ Button::Button(WidgetPtr parent, img::Image &&icon, const std::string& caption, 
 {
     iconData = std::move(icon);
     iconImage = toLVImage(iconData.getPixels(), iconData.getWidth(), iconData.getHeight());
-    lv_img_cache_invalidate_src(&iconImage);
+    lv_image_cache_drop(&iconImage);
 
-    lv_obj_t *button = lv_btn_create(parentObj());
+    lv_obj_t *button = lv_button_create(parentObj());
     lv_obj_set_height(button, LV_SIZE_CONTENT);
 
     if (width >=0) {
         lv_obj_set_width(button, width);
     }
 
-    lv_obj_t *ico = lv_img_create(button);
+    lv_obj_t *ico = lv_image_create(button);
     lv_obj_clear_flag(ico, LV_OBJ_FLAG_CLICKABLE);
-    lv_img_set_src(ico, &iconImage);
+    lv_image_set_src(ico, &iconImage);
     lv_obj_align(ico, LV_ALIGN_TOP_MID, 0, 0);
 
     lv_obj_t *label = lv_label_create(button);
@@ -74,12 +74,12 @@ Button::Button(WidgetPtr parent, img::Image &&icon, const std::string& caption, 
 Button::Button(WidgetPtr parent, Symbol smb):
     Widget(parent)
 {
-    lv_obj_t *button = lv_btn_create(parentObj());
+    lv_obj_t *button = lv_button_create(parentObj());
     // FIXME
     //lv_cont_set_fit(button, LV_FIT_TIGHT);
 
-    lv_obj_t *ico = lv_img_create(button);
-    lv_img_set_src(ico, symbolToLVSymbol(smb));
+    lv_obj_t *ico = lv_image_create(button);
+    lv_image_set_src(ico, symbolToLVSymbol(smb));
     lv_obj_center(ico);
     lv_obj_clear_flag(ico, LV_OBJ_FLAG_CLICKABLE);
 
@@ -102,7 +102,7 @@ void Button::setCallback(ButtonCallback cb) {
     lv_obj_set_user_data(obj(), this);
 
     lv_obj_add_event_cb(obj(), [] (lv_event_t *e) {
-        lv_obj_t *o = lv_event_get_target(e);
+        lv_obj_t *o = lv_event_get_target_obj(e);
         Button *us = reinterpret_cast<Button *>(lv_obj_get_user_data(o));
         if (us->callbackFunc) {
             us->callbackFunc(*us);

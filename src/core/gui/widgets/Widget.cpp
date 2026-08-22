@@ -185,11 +185,11 @@ void Widget::setBGTransparent () {
     lv_obj_set_style_bg_opa(obj(), LV_OPA_TRANSP, 0);
 }
 
-lv_img_dsc_t Widget::toLVImage(const uint32_t* pix, int width, int height) {
-    lv_img_dsc_t res;
+lv_image_dsc_t Widget::toLVImage(const uint32_t* pix, int width, int height) {
+    lv_image_dsc_t res;
 
-    res.header.always_zero = 0;
-    res.header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA;
+    //res.header.always_zero = 0;
+    res.header.cf = LV_COLOR_FORMAT_RAW_ALPHA;
     res.header.w = width;
     res.header.h = height;
 
@@ -222,7 +222,7 @@ void Widget::setClickHandler(ClickHandler handler) {
     lv_obj_set_user_data(obj(), this);
 
     lv_obj_add_event_cb(obj(), [] (lv_event_t *e) {
-        lv_obj_t *o = lv_event_get_target(e);
+        lv_obj_t *o = lv_event_get_target_obj(e);
         lv_event_code_t ev = lv_event_get_code(e);
         Widget *us = reinterpret_cast<Widget *>(lv_obj_get_user_data(o));
         if (ev == LV_EVENT_PRESSED || ev == LV_EVENT_PRESSING || ev == LV_EVENT_RELEASED || ev == LV_EVENT_PRESS_LOST) {
@@ -232,7 +232,7 @@ void Widget::setClickHandler(ClickHandler handler) {
             if (us->onClick) {
                 bool start = (ev == LV_EVENT_PRESSED);
                 bool end = (ev == LV_EVENT_RELEASED) || (ev == LV_EVENT_PRESS_LOST);
-                us->onClick(point.x - o->coords.x1, point.y - o->coords.y1, start, end);
+                us->onClick(point.x - lv_obj_get_x(o), point.y - lv_obj_get_y(o), start, end);
             }
         }
     }, LV_EVENT_ALL, nullptr);
@@ -286,7 +286,7 @@ const void* Widget::symbolToLVSymbol(Symbol symbol) {
     }
 
     if (res) {
-        lv_img_cache_invalidate_src(res);
+        lv_image_cache_drop(res);
     }
     return res;
 }
@@ -302,7 +302,7 @@ void Widget::setManaged() {
 
 Widget::~Widget() {
     if (!managed) {
-        lv_obj_del(obj());
+        lv_obj_delete(obj());
     }
 }
 

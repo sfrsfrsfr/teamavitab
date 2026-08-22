@@ -30,7 +30,7 @@ Keyboard::Keyboard(WidgetPtr parent, std::shared_ptr<TextArea> target):
     lv_obj_set_user_data(keys, this);
 
     lv_obj_add_event_cb(keys, [] (lv_event_t *e) {
-        lv_obj_t *ref = lv_event_get_target(e);
+        lv_obj_t *ref = lv_event_get_target_obj(e);
         lv_event_code_t ev = lv_event_get_code(e);
         Keyboard *us = reinterpret_cast<Keyboard *>(lv_obj_get_user_data(ref));
         if (ev == LV_EVENT_READY) {
@@ -72,14 +72,31 @@ void Keyboard::hideEnterKey() {
         LV_SYMBOL_CLOSE, LV_SYMBOL_LEFT, " ", LV_SYMBOL_RIGHT, LV_SYMBOL_OK, ""
     };
     /*Set the relative width of the buttons and other controls*/
-    static const lv_btnmatrix_ctrl_t kb_ctrl[] = {
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1
+    static const lv_buttonmatrix_ctrl_t kb_ctrl[] = {
+        LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_6,
+        LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+        LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+        LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4
     };
 
     lv_keyboard_set_map(obj(), LV_KEYBOARD_MODE_TEXT_LOWER, defaultMapWithoutEnter, kb_ctrl);
+    lv_keyboard_set_mode(obj(), LV_KEYBOARD_MODE_TEXT_LOWER);
 }
 
 void Keyboard::setNumericLayout() {
@@ -88,12 +105,22 @@ void Keyboard::setNumericLayout() {
             "ABC", ",", " ", LV_SYMBOL_BACKSPACE, LV_SYMBOL_LEFT, LV_SYMBOL_RIGHT, LV_SYMBOL_OK, ""
     };
     /*Set the relative width of the buttons and other controls*/
-    static const lv_btnmatrix_ctrl_t kb_ctrl[] = {
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1
+    static const lv_buttonmatrix_ctrl_t kb_ctrl[] = {
+        LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4,
+        LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_6,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4, LV_BUTTONMATRIX_CTRL_WIDTH_4,
+            LV_BUTTONMATRIX_CTRL_WIDTH_4
     };
 
     lv_keyboard_set_map(obj(), LV_KEYBOARD_MODE_SPECIAL, kb_map_num, kb_ctrl);
+    lv_keyboard_set_mode(obj(), LV_KEYBOARD_MODE_SPECIAL);
 }
 
 bool Keyboard::hasOkAction() const {

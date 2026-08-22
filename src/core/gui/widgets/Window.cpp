@@ -23,8 +23,9 @@ namespace avitab {
 Window::Window(WidgetPtr parent, const std::string& title, const int height):
     Widget(parent)
 {
-    lv_obj_t *win = lv_win_create(parentObj(), height);
+    lv_obj_t *win = lv_win_create(parentObj());
     caption = lv_win_add_title(win, title.c_str());
+    lv_obj_set_height(win, height);
     lv_obj_set_user_data(win, this);
 
     setObj(win);
@@ -49,7 +50,8 @@ void Window::hideScrollbars() {
 
 void Window::getHeaderArea(int &x1, int &y1, int &x2, int &y2) {
     auto header = lv_win_get_header(obj());
-    auto area = header->coords;
+    lv_area_t area;
+    lv_obj_get_coords(header, &area);
     x1 = area.x1;
     y1 = area.y1;
     x2 = area.x2;
@@ -78,9 +80,9 @@ std::shared_ptr<Button> Window::addSymbol(Symbol smb, WindowCallback cb) {
         throw std::runtime_error("Invalid symbol passed to window");
     }
     // FIXME button width 20
-    lv_obj_t *btn = lv_win_add_btn(obj(), lvSymbol, 20);
+    lv_obj_t *btn = lv_win_add_button(obj(), lvSymbol, 20);
     lv_obj_add_event_cb(btn, [] (lv_event_t *e) {
-        lv_obj_t *btn = lv_event_get_target(e);
+        lv_obj_t *btn = lv_event_get_target_obj(e);
         lv_obj_t *winObj = lv_obj_get_parent(lv_obj_get_parent(btn));
         Window *winCls = reinterpret_cast<Window *>(lv_obj_get_user_data(winObj));
         int smbInt = reinterpret_cast<intptr_t>(lv_obj_get_user_data(btn));

@@ -39,7 +39,7 @@ public:
     void setFit(bool hor, bool vert);
 private:
     img::Image iconData;
-    lv_img_dsc_t iconImage;
+    lv_image_dsc_t iconImage;
     lv_style_t styleWhenPressed{}, styleWhenReleased{};
     ButtonCallback callbackFunc;
 };
