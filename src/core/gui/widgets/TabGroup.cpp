@@ -27,8 +27,6 @@ TabGroup::TabGroup(WidgetPtr parent):
 {
     // FIXME tab_height/tab_width
     lv_obj_t *tabs = lv_tabview_create(parentObj(), LV_DIR_TOP, 20);
-    // disable Tabview sliding
-    lv_obj_clear_flag(lv_tabview_get_content(tabs), LV_OBJ_FLAG_SCROLLABLE);
 
     setObj(tabs);
 }
