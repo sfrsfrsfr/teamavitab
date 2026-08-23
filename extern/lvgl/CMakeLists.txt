@@ -1,7 +1,7 @@
 # This file is part of the Avitab project. See the README and LICENSE for details.
 
 project(LVGL
-    VERSION 9.3.0
+    VERSION 9.4.0
     DESCRIPTION "Light and Versatile Graphics Library"
     LANGUAGES C
 )
@@ -39,6 +39,9 @@ set(lvgl_SOURCES
     "draw/lv_draw_triangle.c"
     "draw/lv_draw_vector.c"
     "draw/lv_image_decoder.c"
+    "draw/convert/helium/lv_draw_buf_convert_helium.c"
+    "draw/convert/lv_draw_buf_convert.c"
+    "draw/convert/neon/lv_draw_buf_convert_neon.c"
     "draw/sw/lv_draw_sw_arc.c"
     "draw/sw/lv_draw_sw_border.c"
     "draw/sw/lv_draw_sw_box_shadow.c"
@@ -90,8 +93,6 @@ set(lvgl_SOURCES
     "font/lv_font_montserrat_46.c"
     "font/lv_font_montserrat_48.c"
     "font/lv_font_montserrat_8.c"
-    "font/lv_font_simsun_14_cjk.c"
-    "font/lv_font_simsun_16_cjk.c"
     "font/lv_font_source_han_sans_sc_14_cjk.c"
     "font/lv_font_source_han_sans_sc_16_cjk.c"
     "font/lv_font_unscii_16.c"
@@ -123,6 +124,7 @@ set(lvgl_SOURCES
     "misc/lv_matrix.c"
     "misc/lv_palette.c"
     "misc/lv_profiler_builtin.c"
+    "misc/lv_profiler_builtin_posix.c"
     "misc/lv_rb.c"
     "misc/lv_style.c"
     "misc/lv_style_gen.c"
@@ -136,6 +138,7 @@ set(lvgl_SOURCES
     "misc/cache/lv_cache_entry.c"
     "misc/cache/class/lv_cache_lru_ll.c"
     "misc/cache/class/lv_cache_lru_rb.c"
+    "misc/cache/class/lv_cache_sc_da.c"
     "misc/cache/instance/lv_image_cache.c"
     "misc/cache/instance/lv_image_header_cache.c"
     "osal/lv_linux.c"
@@ -148,6 +151,7 @@ set(lvgl_SOURCES
     "osal/lv_windows.c"
     "osal/lv_os.c"
     "osal/lv_rtthread.c"
+    "others/observer/lv_observer.c"
     "stdlib/builtin/lv_sprintf_builtin.c"
     "stdlib/builtin/lv_mem_core_builtin.c"
     "stdlib/builtin/lv_string_builtin.c"
@@ -168,6 +172,7 @@ set(lvgl_SOURCES
     "tick/lv_tick.c"
     "widgets/3dtexture/lv_3dtexture.c"
     "widgets/animimage/lv_animimage.c"
+    "widgets/arclabel/lv_arclabel.c"
     "widgets/arc/lv_arc.c"
     "widgets/bar/lv_bar.c"
     "widgets/button/lv_button.c"
