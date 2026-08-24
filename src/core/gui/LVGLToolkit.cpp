@@ -40,9 +40,14 @@ LVGLToolkit::LVGLToolkit(std::shared_ptr<UiDriverBase> drv):
     driver->init(INITIAL_WIDTH, INITIAL_HEIGHT);
 
     if (!lvglIsInitialized) {
+        lv_init();
+
         // LVGL does not support de-initialization so we can only do this once
         lv_log_register_print_cb([] (lv_log_level_t level, const char *msg) {
             switch (level) {
+                case LV_LOG_LEVEL_INFO:
+                    logger::info("GUI: %s", msg);
+                    break;
                 case LV_LOG_LEVEL_WARN:
                     logger::warn("GUI: %s", msg);
                     break;
@@ -54,8 +59,6 @@ LVGLToolkit::LVGLToolkit(std::shared_ptr<UiDriverBase> drv):
                     break;
             }
         });
-
-        lv_init();
 
         lvglIsInitialized = true;
     }
