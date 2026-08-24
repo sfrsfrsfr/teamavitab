@@ -30,8 +30,6 @@ Window::Window(WidgetPtr parent, const std::string& title, const int height):
 
     setObj(win);
 
-    setDimensionsPct(95, 100);
-    centerInParent();
 }
 
 void Window::setCaption(const std::string& title) {

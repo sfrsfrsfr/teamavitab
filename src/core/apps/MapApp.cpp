@@ -38,6 +38,7 @@ MapApp::MapApp(FuncsPtr funcs):
     overlayConf = api().getSettings()->getOverlayConfig();
     mapConf = api().getSettings()->getMapConfig();
 
+    window->setDimensionsPct(100, 100);
     rotateButton = window->addSymbol(Widget::Symbol::ROTATE, std::bind(&MapApp::onRotate, this));
     rotateButton->setVisible(false);
     trackButton = window->addSymbol(Widget::Symbol::GPS, std::bind(&MapApp::onTrackButton, this));
