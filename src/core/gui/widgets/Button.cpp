@@ -41,7 +41,6 @@ Button::Button(WidgetPtr parent, img::Image &&icon, const std::string& caption, 
 {
     iconData = std::move(icon);
     iconImage = toLVImage(iconData.getPixels(), iconData.getWidth(), iconData.getHeight());
-    lv_image_cache_drop(&iconImage);
 
     lv_obj_t *button = lv_button_create(parentObj());
     lv_obj_set_height(button, LV_SIZE_CONTENT);
