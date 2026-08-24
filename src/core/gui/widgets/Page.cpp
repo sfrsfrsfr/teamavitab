@@ -37,10 +37,6 @@ Page::Page(WidgetPtr parent, lv_obj_t *page):
     lv_obj_set_style_pad_ver(page, 0 , 0);
 }
 
-void Page::setShowScrollbar(bool show) {
-    lv_obj_set_scrollbar_mode(obj(), show ? LV_SCROLLBAR_MODE_AUTO : LV_SCROLLBAR_MODE_OFF);
-}
-
 void Page::clear() {
     lv_obj_clean((obj()));
 }

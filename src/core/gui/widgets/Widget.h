@@ -71,6 +71,7 @@ public:
     int getY();
     void setVisible(bool visible);
     bool isVisible();
+    void setShowScrollbar(bool show);
     void setScrollable(bool visible);
     bool isScrollable();
     void setBGColor (int color);

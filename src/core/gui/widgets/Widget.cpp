@@ -164,6 +164,10 @@ bool Widget::isVisible() {
     return !lv_obj_has_flag(obj(), LV_OBJ_FLAG_HIDDEN);
 }
 
+void Widget::setShowScrollbar(bool show) {
+    lv_obj_set_scrollbar_mode(obj(), show ? LV_SCROLLBAR_MODE_AUTO : LV_SCROLLBAR_MODE_OFF);
+}
+
 void Widget::setScrollable(bool scrollable) {
     if (scrollable) {
         lv_obj_add_flag(obj(), LV_OBJ_FLAG_SCROLLABLE);
