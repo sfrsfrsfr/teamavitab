@@ -16,6 +16,7 @@
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "Logger.h"
 #include <stdexcept>
 #include "Widget.h"
 
@@ -188,10 +189,12 @@ void Widget::setBGTransparent () {
 lv_image_dsc_t Widget::toLVImage(const uint32_t* pix, int width, int height) {
     lv_image_dsc_t res;
 
-    //res.header.always_zero = 0;
-    res.header.cf = LV_COLOR_FORMAT_RAW_ALPHA;
+    res.header.magic = LV_IMAGE_HEADER_MAGIC;
+    res.header.cf = LV_COLOR_FORMAT_ARGB8888;
+    res.header.flags = 0;
     res.header.w = width;
     res.header.h = height;
+    res.header.stride = 0;
 
     res.data_size = width * height * sizeof(uint32_t);
     res.data = reinterpret_cast<const uint8_t *>(pix);
