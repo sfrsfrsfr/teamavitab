@@ -189,6 +189,21 @@ void Widget::setBGTransparent () {
     lv_obj_set_style_bg_opa(obj(), LV_OPA_TRANSP, 0);
 }
 
+void Widget::setPadding(int left, int right, int top, int bottom) {
+    lv_obj_set_style_pad_left(lvObj, left, 0);
+    lv_obj_set_style_pad_right(lvObj, right, 0);
+    lv_obj_set_style_pad_top(lvObj, top, 0);
+    lv_obj_set_style_pad_bottom(lvObj, bottom, 0);
+}
+
+void Widget::setPaddingHor(int padHor) {
+    lv_obj_set_style_pad_hor(lvObj, padHor, 0);
+}
+
+void Widget::setPaddingVer(int padVer) {
+    lv_obj_set_style_pad_ver(lvObj, padVer, 0);
+}
+
 lv_image_dsc_t Widget::toLVImage(const uint32_t* pix, int width, int height) {
     lv_image_dsc_t res;
 

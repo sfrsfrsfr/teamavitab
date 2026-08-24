@@ -24,11 +24,6 @@ Container::Container(WidgetPtr parent):
 {
     lv_obj_t *cont = lv_obj_create(parentObj());
     setObj(cont);
-
-    lv_obj_set_style_pad_hor(cont, 2 , 0);
-    lv_obj_set_style_pad_ver(cont, 2 , 0);
-
-    setScrollable(false);
 }
 
 Container::Container():
@@ -36,11 +31,6 @@ Container::Container():
 {
     lv_obj_t *cont = lv_obj_create(lv_screen_active());
     setObj(cont);
-
-    lv_obj_set_style_pad_hor(cont, 2 , 0);
-    lv_obj_set_style_pad_ver(cont, 2 , 0);
-
-    setScrollable(false);
 }
 
 void Container::setLayoutFlex() {
