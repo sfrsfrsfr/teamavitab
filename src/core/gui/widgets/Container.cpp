@@ -33,6 +33,12 @@ Container::Container():
     setObj(cont);
 }
 
+Container::Container(WidgetPtr parent, lv_obj_t* obj):
+    Widget(parent)
+{
+    setManagedObj(obj);
+}
+
 void Container::setLayoutFlex() {
     lv_obj_set_flex_flow(obj(), LV_FLEX_FLOW_ROW_WRAP);
     //lv_obj_align(obj(), LV_FLEX_ALIGN_SPACE_BETWEEN, 0, 0);

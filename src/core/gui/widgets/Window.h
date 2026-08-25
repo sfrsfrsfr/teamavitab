@@ -21,6 +21,7 @@
 #include <string>
 #include <map>
 #include "Widget.h"
+#include "Container.h"
 #include "Button.h"
 
 namespace avitab {
@@ -32,6 +33,7 @@ public:
     Window(WidgetPtr parent, const std::string &title, const int height = LV_SIZE_CONTENT);
     void setCaption(const std::string &title);
     void add(WidgetPtr content);
+    std::shared_ptr<Container> getContent();
     void setOnClose(WindowCallback cb);
     void hideScrollbars();
     void getHeaderArea(int &x1, int &y1, int &x2, int &y2);
@@ -40,6 +42,7 @@ public:
     std::shared_ptr<Button> addSymbol(Symbol smb, WindowCallback cb);
 private:
     lv_obj_t *caption;
+    std::shared_ptr<Container> contentArea;
     lv_style_t scrlStyle;
     std::map<Symbol, WindowCallback> callbacks;
 };

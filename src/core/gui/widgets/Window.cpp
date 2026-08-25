@@ -29,7 +29,9 @@ Window::Window(WidgetPtr parent, const std::string& title, const int height):
     lv_obj_set_user_data(win, this);
 
     setObj(win);
-
+    contentArea = std::make_shared<Container>(nullptr, lv_win_get_content(win));
+    // FIXME make contentArea aware the window 'owns' it. do we need to?
+    //contentArea->setParent(*this);
 }
 
 void Window::setCaption(const std::string& title) {
@@ -37,9 +39,11 @@ void Window::setCaption(const std::string& title) {
 }
 
 void Window::add(WidgetPtr content) {
-    // FIXME
-    //content->setParent(this);
-    lv_obj_set_parent(content->obj(), lv_win_get_content(obj()));
+    content->setParent(contentArea);
+}
+
+std::shared_ptr<Container> Window::getContent() {
+    return contentArea;
 }
 
 void Window::hideScrollbars() {
