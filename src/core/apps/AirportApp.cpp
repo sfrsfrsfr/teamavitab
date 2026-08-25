@@ -100,8 +100,6 @@ void AirportApp::onSearchEntered(const std::string& code) {
         onAirportSelected(airports.front());
         clearSearch();
         return;
-    } else if (airports.size() >= navdb::NavDatabase::MAX_DISPLAY_RESULTS) {
-        searchLabel->setText("Too many results, only showing first " + std::to_string(navdb::NavDatabase::MAX_DISPLAY_RESULTS));
     } else {
         searchLabel->setText("");
     }

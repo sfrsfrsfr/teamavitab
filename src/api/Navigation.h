@@ -266,7 +266,6 @@ public:
 class NavDatabase {
 public:
     static constexpr const int MAX_SEARCH_RESULTS = 50;
-    static constexpr const int MAX_DISPLAY_RESULTS = 10;
 
     static constexpr const int VISIT_TOWERED_AIRPORTS = 0b1;
     static constexpr const int VISIT_OTHER_AIRPORTS =   0b10;
