@@ -24,8 +24,9 @@ namespace avitab {
 
 class TextArea: public Widget {
 public:
-    TextArea(WidgetPtr parent, const std::string &text);
+    TextArea(WidgetPtr parent, const std::string &text, const int length = 0, const bool multiLine = true);
     void setMultiLine(bool multiLine);
+    void setMaxLength(int length);
     void setText(const std::string &text);
 //    void setShowCursor(bool show);
     std::string getText();

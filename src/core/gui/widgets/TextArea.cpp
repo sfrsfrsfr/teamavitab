@@ -19,12 +19,18 @@
 
 namespace avitab {
 
-TextArea::TextArea(WidgetPtr parent, const std::string& text):
+TextArea::TextArea(WidgetPtr parent, const std::string& text, const int length, const bool multiLine):
     Widget(parent)
 {
     lv_obj_t *ta = lv_textarea_create(parentObj());
     setObj(ta);
     setText(text);
+    if (length) {
+        setMaxLength(length);
+    }
+    if (! multiLine) {
+        setMultiLine(multiLine);
+    }
 }
 
 void TextArea::setMultiLine(bool multiLine) {
@@ -32,6 +38,12 @@ void TextArea::setMultiLine(bool multiLine) {
         lv_textarea_set_one_line(obj(), false);
     } else {
         lv_textarea_set_one_line(obj(), true);
+    }
+}
+
+void TextArea::setMaxLength(int length) {
+    if (length) {
+        lv_textarea_set_max_length(obj(), length);
     }
 }
 
