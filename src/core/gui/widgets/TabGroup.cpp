@@ -86,42 +86,7 @@ size_t TabGroup::getTabCount() {
 }
 
 void TabGroup::removeTab(size_t i) {
-    // FIXME
-    return;
-    /*
-    lv_tabview_ext_t *ext = reinterpret_cast<lv_tabview_ext_t *>(lv_obj_get_ext_attr(obj()));
-
-    if (ext->tab_cnt <= 1) {
-        throw std::runtime_error("Cannot remove last tab");
-    }
-
-    lv_mem_free(ext->tab_name_ptr[i]);
-    for (uint16_t j = i; j < ext->tab_cnt; j++) {
-        ext->tab_name_ptr[j] = ext->tab_name_ptr[j + 1];
-    }
-
-    lv_btnm_ext_t * btnm_ext = (lv_btnm_ext_t *) lv_obj_get_ext_attr(ext->btns);
-    btnm_ext->map_p = nullptr;
-
-    ext->tab_name_ptr = (const char **) lv_mem_realloc(ext->tab_name_ptr, sizeof(char *) * (ext->tab_cnt));
-    ext->tab_cnt--;
-    lv_btnm_set_map(ext->btns, ext->tab_name_ptr);
-
-    lv_obj_t *page = lv_tabview_get_tab(obj(), i);
-    lv_obj_delete(page);
-
-    const lv_style_t * style_tabs = lv_obj_get_style(ext->btns);
-    lv_coord_t indic_size = (lv_obj_get_width(obj()) - style_tabs->body.padding.inner * (ext->tab_cnt - 1) -
-                 style_tabs->body.padding.left - style_tabs->body.padding.right) /
-                 ext->tab_cnt;
-    lv_obj_set_width(ext->indic, indic_size);
-    lv_obj_set_x(ext->indic, indic_size * ext->tab_cur + style_tabs->body.padding.inner * ext->tab_cur +
-                                 style_tabs->body.padding.left);
-
-    lv_tabview_set_btns_hidden(obj(), false);
-    setActiveTab(ext->tab_cnt - 1);
-    lv_obj_invalidate(obj());
-    */
+    lv_tabview_delete_tab(obj(), i);
 }
 
 void TabGroup::clear() {
