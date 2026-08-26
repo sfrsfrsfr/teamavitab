@@ -17,6 +17,7 @@
  */
 #pragma once
 
+#include <stdexcept>
 #include <vector>
 #include <string>
 #include <functional>
@@ -30,6 +31,7 @@ public:
     using SelectCallback = std::function<void()>;
 
     DropDownList(WidgetPtr parent, const std::vector<std::string> &choices);
+    void setSymbol(Symbol smb);
     void setSelectAction(SelectCallback cb);
     int getSelectedIndex();
 private:

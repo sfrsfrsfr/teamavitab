@@ -44,6 +44,32 @@ int DropDownList::getSelectedIndex() {
     return lv_dropdown_get_selected(obj());
 }
 
+void DropDownList::setSymbol(Symbol smb) {
+    const void *lvSymbol = symbolToLVSymbol(smb);
+    if (!lvSymbol) {
+        throw std::runtime_error("Invalid symbol passed to dropdown");
+    }
+
+    switch (smb) {
+        case Symbol::LEFT:
+            lv_dropdown_set_symbol(obj(), lvSymbol);
+            lv_dropdown_set_dir(obj(), LV_DIR_LEFT);
+            break;
+        case Symbol::RIGHT:
+            lv_dropdown_set_symbol(obj(), lvSymbol);
+            lv_dropdown_set_dir(obj(), LV_DIR_RIGHT);
+            break;
+        case Symbol::UP:
+            lv_dropdown_set_symbol(obj(), lvSymbol);
+            lv_dropdown_set_dir(obj(), LV_DIR_BOTTOM);
+            break;
+        case Symbol::DOWN:
+            lv_dropdown_set_symbol(obj(), lvSymbol);
+            lv_dropdown_set_dir(obj(), LV_DIR_TOP);
+            break;
+    }
+}
+
 void DropDownList::setSelectAction(SelectCallback cb) {
     onSelect = cb;
 
