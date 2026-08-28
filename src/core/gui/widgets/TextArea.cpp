@@ -51,6 +51,10 @@ void TextArea::setText(const std::string& text) {
     lv_textarea_set_text(obj(), text.c_str());
 }
 
+void TextArea::setPlaceholderText(const std::string& text) {
+    lv_textarea_set_placeholder_text(obj(), text.c_str());
+}
+
 std::string TextArea::getText() {
     return lv_textarea_get_text(obj());
 }

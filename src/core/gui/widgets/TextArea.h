@@ -28,6 +28,7 @@ public:
     void setMultiLine(bool multiLine);
     void setMaxLength(int length);
     void setText(const std::string &text);
+    void setPlaceholderText(const std::string &text);
 //    void setShowCursor(bool show);
     std::string getText();
 };
