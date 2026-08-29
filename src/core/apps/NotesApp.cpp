@@ -17,7 +17,7 @@
  */
 #include "NotesApp.h"
 #include "Logger.h"
-#include "platform/Platform.h"
+#include <other/Clip.h>
 
 namespace avitab {
 
@@ -31,7 +31,7 @@ NotesApp::NotesApp(FuncsPtr appFuncs):
 
     window->addSymbol(Widget::Symbol::COPY, [this] () {
         if (textArea) {
-            textArea->setText(platform::getClipboardContent());
+            textArea->setText(Clip::getClipboardContent());
         }
 
         if (scratchPad) {

@@ -35,6 +35,7 @@ PrepareExternPackages(
     openjpeg    "https://github.com/uclouvain/openjpeg/archive/refs/tags/v2.5.3.tar.gz"
     glfw        "https://github.com/glfw/glfw/archive/refs/tags/3.4.tar.gz"
     lvgl        "https://github.com/lvgl/lvgl/archive/refs/tags/v6.1.2.tar.gz"
+    clip        "https://github.com/dacap/clip/archive/refs/tags/v1.15.tar.gz"
 
     # Remaining packages have dependencies, so order matters.
 
@@ -61,7 +62,7 @@ PrepareExternPackages(
     geotiff     "https://github.com/OSGeo/libgeotiff/archive/refs/tags/1.4.3.tar.gz"
 
     # freetype uses zlib, bzip2, brotli, png, and harfbuzz (circular-dependency).
-    freetype    "https://download.savannah.gnu.org/releases/freetype/freetype-2.13.3.tar.gz"
+    freetype    "https://download-mirror.savannah.gnu.org/releases/freetype/freetype-2.13.3.tar.gz"
 
     # harfbuzz uses freetype, but will use Avitab's freetype if it is a build target, so is processed afterwards
     harfbuzz    "https://github.com/harfbuzz/harfbuzz/archive/refs/tags/11.2.1.tar.gz"
@@ -136,6 +137,7 @@ target_link_libraries(avitab_extern INTERFACE
     Threads::Threads
     nlohmann_json_imp curl_imp mupdf_imp lvgl_imp sqlite3_imp
     freetype_imp mbedtls_imp stb_imp geotiff_imp zstd_imp zlibs_imp
+    clip_imp
     ${sys_libraries}
 )
 
