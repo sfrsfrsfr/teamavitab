@@ -31,7 +31,11 @@ NotesApp::NotesApp(FuncsPtr appFuncs):
     windowContent->setPadding();
     image.resize(windowContent->getWidth(), windowContent->getHeight(), img::COLOR_WHITE);
 
-    window->setOnClose([this] () { exit(); });
+    keyboardButton = window->addSymbol(Widget::Symbol::KEYBOARD, [this] () {
+        mode = (mode + 1) % 3;
+        keyboardButton->setToggleState(mode != 0);
+        createLayout();
+    });
 
     window->addSymbol(Widget::Symbol::COPY, [this] () {
         if (textArea) {
@@ -44,11 +48,8 @@ NotesApp::NotesApp(FuncsPtr appFuncs):
         }
     });
 
-    keyboardButton = window->addSymbol(Widget::Symbol::KEYBOARD, [this] () {
-        mode = (mode + 1) % 3;
-        keyboardButton->setToggleState(mode != 0);
-        createLayout();
-    });
+
+    window->setOnClose([this] () { exit(); });
 
     createLayout();
 }

@@ -62,9 +62,9 @@ void DocumentsApp::createBrowseTab() {
     browseWindow->setDimensions(browsePage->getContentWidth(), browsePage->getHeight());
     browseWindow->centerInParent();
 
-    browseWindow->setOnClose([this] { exit(); });
-    browseWindow->addSymbol(Widget::Symbol::DOWN, [this] () { onDown(); });
     browseWindow->addSymbol(Widget::Symbol::UP, [this] () { onUp(); });
+    browseWindow->addSymbol(Widget::Symbol::DOWN, [this] () { onDown(); });
+    browseWindow->setOnClose([this] { exit(); });
     list = std::make_shared<List>(browseWindow);
     list->setDimensions(browseWindow->getContentWidth(), browseWindow->getContentHeight());
     list->setCallback([this] (int data) {
