@@ -50,6 +50,7 @@ public:
     void setDimensionsPct(int width, int height);
     void setWidthPct(int width);
     void setHeightPct(int width);
+    void setSizeByContent();
     void setClickable(bool click);
     void setClickHandler(ClickHandler handler);
     //void enablePanning();

@@ -94,6 +94,10 @@ void Widget::setHeightPct(int height) {
     lv_obj_set_height(lvObj, lv_pct(height));
 }
 
+void Widget::setSizeByContent() {
+    lv_obj_set_size(obj(), LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+}
+
 void Widget::centerInParent() {
     lv_obj_align(lvObj, LV_ALIGN_CENTER, 0, 0);
 }
