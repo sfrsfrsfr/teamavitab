@@ -91,7 +91,6 @@ void AirportApp::onSearchEntered(const std::string& code) {
     if (airports.empty()) {
         searchLabel->setText("No matching airports found");
         resultList.reset();
-        nextButton.reset();
         return;
     } else if (airports.size() == 1) {
         onAirportSelected(airports.front());
@@ -113,10 +112,7 @@ void AirportApp::onSearchEntered(const std::string& code) {
     resultList->setWidthPct(25);
     resultList->alignBelow(searchLabel);
 
-    nextButton = std::make_shared<Button>(searchWindowContent, "Next");
-    nextButton->alignRightOf(resultList, 5);
-
-    nextButton->setCallback([this, airports] (const Button &) {
+    resultList->setSelectAction([this, airports] {
         size_t idx = resultList->getSelectedIndex();
         if (idx < airports.size()) {
             auto airport = airports.at(resultList->getSelectedIndex());
@@ -173,7 +169,6 @@ void AirportApp::clearSearch() {
     searchField->setText("");
     searchLabel->setText("");
     resultList.reset();
-    nextButton.reset();
 }
 
 void AirportApp::removeTab(std::shared_ptr<Page> page) {
