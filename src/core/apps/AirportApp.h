@@ -74,6 +74,7 @@ private:
     Timer updateTimer;
     std::shared_ptr<Page> searchPage;
     std::shared_ptr<Window> searchWindow;
+    std::shared_ptr<Container> searchWindowContent;
     std::shared_ptr<Container> prefContainer;
     std::shared_ptr<Label> searchLabel, sortLabel;
     std::shared_ptr<Checkbox> sortCheckbox, sortAscCheckbox;

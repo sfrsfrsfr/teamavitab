@@ -25,7 +25,11 @@ NotesApp::NotesApp(FuncsPtr appFuncs):
     App(appFuncs),
     window(std::make_shared<Window>(getUIContainer(), "Notes"))
 {
-    image.resize(window->getContentWidth(), window->getContentHeight(), img::COLOR_WHITE);
+    window->setPadding();
+    window->setDimensionsPct(100, 100);
+    windowContent = window->getContent();
+    windowContent->setPadding();
+    image.resize(windowContent->getWidth(), windowContent->getHeight(), img::COLOR_WHITE);
 
     window->setOnClose([this] () { exit(); });
 
@@ -60,7 +64,7 @@ void NotesApp::createLayout() {
 
     switch (mode) {
     case 0:
-        scratchPad = std::make_shared<PixMap>(window);
+        scratchPad = std::make_shared<PixMap>(windowContent);
         scratchPad->draw(image);
         scratchPad->setClickable(true);
         scratchPad->setClickHandler([this] (int x, int y, bool start, bool stop) {
@@ -68,22 +72,21 @@ void NotesApp::createLayout() {
         });
         break;
     case 1:
-        textArea = std::make_shared<TextArea>(window, text);
-        textArea->setDimensions(window->getContentWidth(), window->getContentHeight());
-        keys = std::make_shared<Keyboard>(window, textArea);
+        textArea = std::make_shared<TextArea>(windowContent, text);
+        keys = std::make_shared<Keyboard>(windowContent, textArea);
         keys->setOnCancel([this] {
             textArea->setText("");
         });
         break;
     case 2:
-        textArea = std::make_shared<TextArea>(window, text);
-        textArea->setDimensions(window->getContentWidth(), window->getContentHeight());
+        textArea = std::make_shared<TextArea>(windowContent, text);
         break;
     }
 }
 
 void NotesApp::onDraw(int x, int y, bool start, bool stop) {
     if (x < 0 || x >= image.getWidth() || y < 0 || y >= image.getHeight()) {
+    //if (x < 0 || x >= windowContent->getWidth() || y < 0 || y >= windowContent->getHeight()) {
         return;
     }
 

@@ -41,35 +41,23 @@ AirportApp::AirportApp(FuncsPtr appFuncs):
 
 void AirportApp::resetLayout() {
     tabs = std::make_shared<TabGroup>(getUIContainer());
-    tabs->centerInParent();
 
     searchPage = tabs->addTab(tabs, "Search");
     searchPage->setPadding();
     searchWindow = std::make_shared<Window>(searchPage, "Search");
-    searchWindow->setDimensions(searchPage->getContentWidth(), searchPage->getHeight());
-    searchWindow->centerInParent();
+    searchWindow->setDimensionsPct(100, 100);
+    searchWindowContent = searchWindow->getContent();
+
     searchWindow->addSymbol(Widget::Symbol::SETTINGS, std::bind(&AirportApp::toggleSettings, this));
     searchWindow->setOnClose([this] { prefContainer->setVisible(false); exit(); });
 
-    searchField = std::make_shared<TextArea>(searchWindow, "");
-    searchField->alignInTopLeft();
-    searchField->setDimensions(searchField->getWidth(), 30);
+    searchField = std::make_shared<TextArea>(searchWindowContent, "", 10, false);
+    searchField->setPlaceholderText("Search...");
 
-    searchLabel = std::make_shared<Label>(searchWindow, "Enter a keyword or ICAO code");
-    searchLabel->setPosition(0, searchField->getY() + searchField->getHeight() + 12);
+    searchLabel = std::make_shared<Label>(searchWindowContent, "Enter a keyword or ICAO code");
+    searchLabel->alignBelow(searchField);
 
-    keys = std::make_shared<Keyboard>(searchWindow, searchField);
-    keys->hideEnterKey();
-    keys->setOnCancel([this] { clearSearch(); });
-    keys->setOnOk([this] {
-        api().executeLater([this] {
-            onSearchEntered(searchField->getText());
-        });
-    });
-    keys->setDimensions(searchWindow->getContentWidth(), keys->getHeight());
-    keys->setPosition(0, searchWindow->getContentHeight() - keys->getHeight());
-
-    nearestButton = std::make_shared<Button>(searchWindow, "Nearest");
+    nearestButton = std::make_shared<Button>(searchWindowContent, "Nearest");
     nearestButton->alignRightOf(searchField, 80);
     nearestButton->setCallback([this] (const Button &) {
         auto world = api().getNavDatabase();
@@ -78,6 +66,15 @@ void AirportApp::resetLayout() {
         if (airport != nullptr) {
             onAirportSelected(airport);
         };
+    });
+
+    keys = std::make_shared<Keyboard>(searchWindowContent, searchField);
+    keys->hideEnterKey();
+    keys->setOnCancel([this] { clearSearch(); });
+    keys->setOnOk([this] {
+        api().executeLater([this] {
+            onSearchEntered(searchField->getText());
+        });
     });
 }
 
@@ -112,10 +109,11 @@ void AirportApp::onSearchEntered(const std::string& code) {
         resultStrings.push_back(ap->getDisplayID() + " - " + ap->getName());
     }
 
-    resultList = std::make_shared<DropDownList>(searchPage, resultStrings);
+    resultList = std::make_shared<DropDownList>(searchWindowContent, resultStrings);
+    resultList->setWidthPct(25);
     resultList->alignBelow(searchLabel);
 
-    nextButton = std::make_shared<Button>(searchPage, "Next");
+    nextButton = std::make_shared<Button>(searchWindowContent, "Next");
     nextButton->alignRightOf(resultList, 5);
 
     nextButton->setCallback([this, airports] (const Button &) {
@@ -140,12 +138,11 @@ void AirportApp::onAirportSelected(std::shared_ptr<navdb::Airport> airport) {
     tab.page = tabs->addTab(tabs, airport->getDisplayID());
     tab.page->setPadding();
     tab.window = std::make_shared<Window>(tab.page, toAptHeader(airport));
-    tab.window->setDimensions(tab.page->getContentWidth(), tab.page->getHeight());
-    tab.window->alignInTopLeft();
+    tab.window->setDimensionsPct(100, 100);
 
     auto page = tab.page;
 
-    tab.label = std::make_shared<Label>(tab.window, "");
+    tab.label = std::make_shared<Label>(tab.window->getContent(), "");
     tab.label->setLongMode(true);
 
     tab.window->addSymbol(Widget::Symbol::LIST, [this, airport, page] {
@@ -440,6 +437,7 @@ void AirportApp::onChartsLoaded(std::shared_ptr<Page> page, const apis::ChartSer
             auto newPage = newTab.page;
 
             newTab.window = std::make_shared<Window>(newTab.page, chart->getIndex());
+            newTab.window->setPadding();
             newTab.window->setDimensions(newTab.page->getContentWidth(), newTab.page->getHeight() + 30);
             newTab.window->alignInTopLeft();
             newTab.window->setOnClose([this, newPage] {
@@ -567,10 +565,8 @@ void AirportApp::createSettingsContainer() {
     auto ui = getUIContainer();
 
     prefContainer = std::make_shared<Container>();
-    prefContainer->setDimensions(ui->getWidth() / 8, ui->getHeight() / 2);
-    prefContainer->alignTopRightInParent(10, 127);
-    // FIXME
-    //prefContainer->setFit(Container::Fit::TIGHT, Container::Fit::TIGHT);
+    prefContainer->setSizeByContent();
+    prefContainer->alignTopRightInParent(10, 100);
     prefContainer->setVisible(false);
 
     sortLabel = std::make_shared<Label>(prefContainer, "Sort options");

@@ -23,9 +23,9 @@ namespace avitab {
 About::About(FuncsPtr appFuncs):
     App(appFuncs),
     window(std::make_shared<Window>(getUIContainer(), "About AviTab")),
-    label(std::make_shared<Label>(window, ""))
+    label(std::make_shared<Label>(window->getContent(), ""))
 {
-    window->add(label);
+    window->setDimensionsPct(100, 100);
     window->setOnClose([this] () { exit(); });
 
     std::string aboutText =

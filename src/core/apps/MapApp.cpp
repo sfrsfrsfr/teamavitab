@@ -35,10 +35,13 @@ MapApp::MapApp(FuncsPtr funcs):
     savedSettings(funcs->getSettings()),
     updateTimer(std::bind(&MapApp::onTimer, this), 200)
 {
+    window->setPadding();
+    window->getContent()->setPadding();
+    window->setDimensionsPct(100, 100);
+
     overlayConf = api().getSettings()->getOverlayConfig();
     mapConf = api().getSettings()->getMapConfig();
 
-    window->setDimensionsPct(100, 100);
     rotateButton = window->addSymbol(Widget::Symbol::ROTATE, std::bind(&MapApp::onRotate, this));
     rotateButton->setVisible(false);
     trackButton = window->addSymbol(Widget::Symbol::GPS, std::bind(&MapApp::onTrackButton, this));
@@ -49,9 +52,9 @@ MapApp::MapApp(FuncsPtr funcs):
     window->addSymbol(Widget::Symbol::LIST, std::bind(&MapApp::onSettingsButton, this));
     window->setOnClose([this] () { exit(); });
 
-    mapImage = std::make_shared<img::Image>(window->getContentWidth(), window->getContentHeight() - 30, img::COLOR_TRANSPARENT);
+    mapImage = std::make_shared<img::Image>(window->getContent()->getWidth(), window->getContent()->getHeight(), img::COLOR_TRANSPARENT);
 
-    mapWidget = std::make_shared<PixMap>(window);
+    mapWidget = std::make_shared<PixMap>(window->getContent());
     mapWidget->setClickable(true);
     mapWidget->setClickHandler([this] (int x, int y, bool pr, bool rel) { onMapPan(x, y, pr, rel); });
 
@@ -74,17 +77,13 @@ MapApp::MapApp(FuncsPtr funcs):
 void MapApp::createSettingsLayout() {
     auto ui = getUIContainer();
 
-    settingsContainer = std::make_shared<Container>();
-    settingsContainer->setDimensions(ui->getWidth() / 2, ui->getHeight() / 2);
+    settingsContainer = std::make_shared<Container>(window->getContent());
+    settingsContainer->setSizeByContent();
     settingsContainer->centerInParent();
-
-    // FIXME settingsContainer->setFit(Container::Fit::TIGHT, Container::Fit::TIGHT);
     settingsContainer->setVisible(false);
 
     onlineMapsButton = std::make_shared<Button>(settingsContainer, "Online");
     onlineMapsButton->setCallback([this] (const Button &) { setMapSource(MapSource::ONLINE_TILES); });
-    onlineMapsButton->setFit(false, true);
-    onlineMapsButton->setDimensions(onlineMapsButton->getWidth() + 30, onlineMapsButton->getHeight());
     // The onlineMapsLabel is defined as a private variable; We want
     // to refer to it throught the program's execution to update the label
     // when selecting a different online map, or selecting a non-online map
@@ -94,8 +93,6 @@ void MapApp::createSettingsLayout() {
 
     epsgButton = std::make_shared<Button>(settingsContainer, "EPSG-3857");
     epsgButton->setCallback([this] (const Button &) { setMapSource(MapSource::EPSG3857); });
-    epsgButton->setFit(false, true);
-    epsgButton->setDimensions(onlineMapsButton->getWidth(), onlineMapsButton->getHeight());
     epsgButton->alignBelow(onlineMapsButton, 10);
     auto epsgLabel = std::make_shared<Label>(settingsContainer, "Uses slippy tiles that you downloaded.");
     epsgLabel->alignRightOf(epsgButton, 10);
@@ -103,8 +100,6 @@ void MapApp::createSettingsLayout() {
 
     geoTiffButton = std::make_shared<Button>(settingsContainer, "GeoTIFF");
     geoTiffButton->setCallback([this] (const Button &) { setMapSource(MapSource::GEOTIFF); });
-    geoTiffButton->setFit(false, true);
-    geoTiffButton->setDimensions(onlineMapsButton->getWidth(), onlineMapsButton->getHeight());
     geoTiffButton->alignBelow(epsgButton, 10);
     auto geoTiffLabel = std::make_shared<Label>(settingsContainer, "Uses GeoTIFF images that you downloaded.");
     geoTiffLabel->alignRightOf(geoTiffButton, 10);
@@ -112,8 +107,6 @@ void MapApp::createSettingsLayout() {
 
     mercatorButton = std::make_shared<Button>(settingsContainer, "Mercator");
     mercatorButton->setCallback([this] (const Button &) { setMapSource(MapSource::MERCATOR); });
-    mercatorButton->setFit(false, true);
-    mercatorButton->setDimensions(onlineMapsButton->getWidth(), onlineMapsButton->getHeight());
     mercatorButton->alignBelow(geoTiffButton, 10);
     auto mercatorLabel = std::make_shared<Label>(settingsContainer, "Uses any PDF or image as Mercator map.");
     mercatorLabel->alignRightOf(mercatorButton, 10);
@@ -512,11 +505,9 @@ void MapApp::onOverlaysButton() {
 void MapApp::showOverlaySettings() {
     auto ui = getUIContainer();
 
-    overlaysContainer = std::make_shared<Container>();
-    overlaysContainer->setDimensions(ui->getWidth() / 8, ui->getHeight() / 2);
-    overlaysContainer->alignTopRightInParent(10, 66);
-    // FIXME
-    //overlaysContainer->setFit(Container::Fit::TIGHT, Container::Fit::TIGHT);
+    overlaysContainer = std::make_shared<Container>(window->getContent());
+    overlaysContainer->setSizeByContent();
+    overlaysContainer->alignTopRightInParent();
     overlaysContainer->setVisible(true);
 
     overlayLabel = std::make_shared<Label>(overlaysContainer, "Overlays:");
