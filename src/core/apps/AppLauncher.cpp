@@ -89,17 +89,10 @@ void AppLauncher::addEntry(const std::string& name, const std::filesystem::path&
         this->show();
     });
 
-    img::Image iconImg;
-    try {
-        iconImg.loadImageFile(icon);
-    } catch (const std::exception &e) {
-        logger::warn("Couldn't load icon %s: %s", icon.c_str(), e.what());
-    }
-
     Entry entry;
     entry.id = id;
     entry.app = std::move(app);
-    entry.button = std::make_shared<Button>(getUIContainer(), std::move(iconImg), name, 100);
+    entry.button = std::make_shared<Button>(getUIContainer(), icon, name, 100);
     entries.push_back(entry);
 
     size_t index = entries.size() - 1;
