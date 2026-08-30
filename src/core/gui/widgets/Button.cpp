@@ -36,6 +36,28 @@ Button::Button(WidgetPtr parent, const std::string& text):
     setObj(button);
 }
 
+Button::Button(WidgetPtr parent, const std::filesystem::path& icon, const std::string& caption, int width):
+    Widget(parent)
+{
+    lv_obj_t *button = lv_button_create(parentObj());
+
+    if (width > 0) {
+        lv_obj_set_width(button, width);
+    }
+
+    lv_obj_t *ico = lv_image_create(button);
+    lv_obj_clear_flag(ico, LV_OBJ_FLAG_CLICKABLE);
+    lv_image_set_src(ico, icon.c_str());
+    lv_obj_align(ico, LV_ALIGN_TOP_MID, 0, 0);
+
+    lv_obj_t *label = lv_label_create(button);
+    lv_obj_clear_flag(label, LV_OBJ_FLAG_CLICKABLE);
+    lv_label_set_text(label, caption.c_str());
+    lv_obj_align_to(label, ico, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+
+    setObj(button);
+}
+
 Button::Button(WidgetPtr parent, img::Image &&icon, const std::string& caption, int width):
     Widget(parent)
 {
