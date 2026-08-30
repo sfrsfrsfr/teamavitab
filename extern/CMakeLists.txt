@@ -131,6 +131,11 @@ elseif(APPLE)
         "-framework CoreServices" "-framework ApplicationServices"
         "-framework Cocoa" "-framework IOKit"
     )
+elseif(UNIX)
+    # clip uses xcb for X11 clipboard access on Linux
+    set(sys_libraries
+        xcb
+    )
 endif()
 
 target_link_libraries(avitab_extern INTERFACE
