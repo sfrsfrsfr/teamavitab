@@ -19,11 +19,9 @@
 
 #include <clip.h>
 
-namespace avitab {
+namespace clip {
 
-class Clip {
-public:
-    static std::string getClipboardContent();
-};
+    std::string getClipboardContent();
+    void setClipboardContent(const std::string &text);
 
-} /* namespace avitab */
+}

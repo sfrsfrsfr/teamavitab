@@ -17,12 +17,16 @@
  */
 #include "Clip.h"
 
-namespace avitab {
+namespace clip {
 
-std::string Clip::getClipboardContent() {
+std::string getClipboardContent() {
     std::string text;
     clip::get_text(text);
     return text;
 }
 
-} /* namespace avitab */
+void setClipboardContent(const std::string &text) {
+    clip::set_text(text);
+}
+
+}

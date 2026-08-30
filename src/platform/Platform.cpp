@@ -40,6 +40,7 @@
 #include <cassert>
 #include "Platform.h"
 #include "Logger.h"
+#include "other/Clip.h"
 
 /*
  * The purpose of this module is to put all platform (as in Posix or Win32)
@@ -226,6 +227,14 @@ std::string getLocalTime(const std::string &format) {
     char buf[16];
     strftime(buf, sizeof(buf), format.c_str(), local);
     return buf;
+}
+
+std::string getClipboardContent() {
+    return clip::getClipboardContent();
+}
+
+void setClipboardContent(std::string &text) {
+    clip::set_text(text);
 }
 
 std::string formatStringArgs(const std::string format, va_list list) {
