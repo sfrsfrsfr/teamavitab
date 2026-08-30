@@ -25,7 +25,6 @@
 #include "RouteApp.h"
 #include "MapApp.h"
 #include "ProvidersApp.h"
-#include "image/Image.h"
 
 namespace avitab {
 
