@@ -292,8 +292,8 @@ std::string AirportApp::toRunwayInfo(std::shared_ptr<navdb::Airport> airport) {
                 int ilsHeading = (int)(ils->getRunwayHeading() + magneticVariation + 0.5 + 360.0) % 360;
 
                 str << " " << ils->getFrequency().getDescription();
-                str << " (ID " << na->getIdent();
-                str << " on " << ils->getFrequency().getFrequencyString();
+                str << " (ID #6c71c4 " << na->getIdent() << "#";
+                str << " on #859900 " << ils->getFrequency().getFrequencyString() << "#";
                 if (ilsHeading != rwHeading) {
                     str << ", CRS " << ilsHeading << "° M";
                 }

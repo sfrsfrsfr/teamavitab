@@ -25,6 +25,7 @@ Label::Label(WidgetPtr parent, const std::string& title):
     Widget(parent)
 {
     lv_obj_t *label = lv_label_create(parentObj());
+    lv_label_set_recolor(label, true);
     setObj(label);
 
     setText(title);
