@@ -44,7 +44,7 @@ void AirportApp::resetLayout() {
 
     searchPage = tabs->addTab(tabs, "Search");
     searchPage->setPadding();
-    searchWindow = std::make_shared<Window>(searchPage, "Search");
+    searchWindow = std::make_shared<Window>(searchPage, "");
     searchWindow->setDimensionsPct(100, 100);
     searchWindowContent = searchWindow->getContent();
 
