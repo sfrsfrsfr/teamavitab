@@ -59,14 +59,13 @@ void DocumentsApp::resetLayout() {
 void DocumentsApp::createBrowseTab() {
     browsePage = tabs->addTab(tabs, "Files");
     browseWindow = std::make_shared<Window>(browsePage, appTitle);
-    browseWindow->setDimensions(browsePage->getContentWidth(), browsePage->getHeight());
-    browseWindow->centerInParent();
+    browseWindow->setDimensionsPct(100, 100);
 
     browseWindow->addSymbol(Widget::Symbol::UP, [this] () { onUp(); });
     browseWindow->addSymbol(Widget::Symbol::DOWN, [this] () { onDown(); });
     browseWindow->setOnClose([this] { exit(); });
     list = std::make_shared<List>(browseWindow);
-    list->setDimensions(browseWindow->getContentWidth(), browseWindow->getContentHeight());
+    list->setDimensionsPct(100, 100);
     list->setCallback([this] (int data) {
         api().executeLater([this, data] {
             onSelect(data);
@@ -151,8 +150,7 @@ void DocumentsApp::createDocumentTab(const std::filesystem::path &docPath) {
     tab->path = docPath;
     tab->page = tabs->addTab(tabs, name);
     tab->window = std::make_shared<Window>(tab->page, name);
-    tab->window->setDimensions(tab->page->getContentWidth(), tab->page->getHeight());
-    tab->window->alignInTopLeft();
+    tab->window->setDimensions(100, 100);
 
     tab->pixMap = std::make_shared<PixMap>(tab->window);
     tab->rasterImage = std::make_shared<img::Image>(tab->window->getContentWidth(), tab->window->getContentHeight(), img::COLOR_TRANSPARENT);

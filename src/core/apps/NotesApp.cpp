@@ -74,6 +74,7 @@ void NotesApp::createLayout() {
         break;
     case 1:
         textArea = std::make_shared<TextArea>(windowContent, text);
+        textArea->setWidthPct(100);
         keys = std::make_shared<Keyboard>(windowContent, textArea);
         keys->setOnCancel([this] {
             textArea->setText("");
@@ -81,6 +82,7 @@ void NotesApp::createLayout() {
         break;
     case 2:
         textArea = std::make_shared<TextArea>(windowContent, text);
+        textArea->setWidthPct(100);
         break;
     }
 }
