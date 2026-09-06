@@ -257,7 +257,9 @@ void Widget::setClickHandler(ClickHandler handler) {
             if (us->onClick) {
                 bool start = (ev == LV_EVENT_PRESSED);
                 bool end = (ev == LV_EVENT_RELEASED) || (ev == LV_EVENT_PRESS_LOST);
-                us->onClick(point.x - lv_obj_get_x(o), point.y - lv_obj_get_y(o), start, end);
+                lv_area_t coords;
+                lv_obj_get_coords(o, &coords);
+                us->onClick(point.x - coords.x1, point.y - coords.y1, start, end);
             }
         }
     }, LV_EVENT_ALL, nullptr);
