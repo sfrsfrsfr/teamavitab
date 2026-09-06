@@ -58,13 +58,15 @@ void DocumentsApp::resetLayout() {
 
 void DocumentsApp::createBrowseTab() {
     browsePage = tabs->addTab(tabs, "Files");
+    browsePage->setPadding();
     browseWindow = std::make_shared<Window>(browsePage, appTitle);
     browseWindow->setDimensionsPct(100, 100);
+    browseWindowContent = browseWindow->getContent();
 
     browseWindow->addSymbol(Widget::Symbol::UP, [this] () { onUp(); });
     browseWindow->addSymbol(Widget::Symbol::DOWN, [this] () { onDown(); });
     browseWindow->setOnClose([this] { exit(); });
-    list = std::make_shared<List>(browseWindow);
+    list = std::make_shared<List>(browseWindowContent);
     list->setDimensionsPct(100, 100);
     list->setCallback([this] (int data) {
         api().executeLater([this, data] {
@@ -152,13 +154,15 @@ void DocumentsApp::createDocumentTab(const std::filesystem::path &docPath) {
     tab->window = std::make_shared<Window>(tab->page, name);
     tab->window->setDimensionsPct(100, 100);
 
-    tab->pixMap = std::make_shared<PixMap>(tab->window);
+    tab->pixMap = std::make_shared<PixMap>(tab->window->getContent());
     tab->rasterImage = std::make_shared<img::Image>(tab->window->getContentWidth(), tab->window->getContentHeight(), img::COLOR_TRANSPARENT);
     tab->pixMap->setClickable(true);
     tab->pixMap->setClickHandler([this] (int x, int y, bool pr, bool rel) { onPan(x, y, pr, rel); });
     tab->pixMap->draw(*tab->rasterImage);
 
     auto page = tab->page;
+
+    setupCallbacks(tab);
     tab->window->setOnClose([this, page] {
         api().executeLater([this, page] {
             if (settingsContainer) {
@@ -167,7 +171,6 @@ void DocumentsApp::createDocumentTab(const std::filesystem::path &docPath) {
             removeTab(page);
         });
     });
-    setupCallbacks(tab);
 
     try {
         loadFile(tab, docPath);
@@ -195,12 +198,12 @@ void DocumentsApp::removeTab(std::shared_ptr<Page> page) {
 }
 
 void DocumentsApp::setupCallbacks(PageInfo tab) {
-    tab->window->addSymbol(Widget::Symbol::SETTINGS, [this] () { onSettingsToggle(); });
-    tab->window->addSymbol(Widget::Symbol::MINUS, std::bind(&DocumentsApp::onMinus, this));
-    tab->window->addSymbol(Widget::Symbol::PLUS, std::bind(&DocumentsApp::onPlus, this));
-    tab->window->addSymbol(Widget::Symbol::RIGHT, std::bind(&DocumentsApp::onNextPage, this));
-    tab->window->addSymbol(Widget::Symbol::LEFT, std::bind(&DocumentsApp::onPrevPage, this));
     tab->window->addSymbol(Widget::Symbol::ROTATE, std::bind(&DocumentsApp::onRotate, this));
+    tab->window->addSymbol(Widget::Symbol::LEFT, std::bind(&DocumentsApp::onPrevPage, this));
+    tab->window->addSymbol(Widget::Symbol::RIGHT, std::bind(&DocumentsApp::onNextPage, this));
+    tab->window->addSymbol(Widget::Symbol::PLUS, std::bind(&DocumentsApp::onPlus, this));
+    tab->window->addSymbol(Widget::Symbol::MINUS, std::bind(&DocumentsApp::onMinus, this));
+    tab->window->addSymbol(Widget::Symbol::SETTINGS, [this] () { onSettingsToggle(); });
 }
 
 void DocumentsApp::loadFile(PageInfo tab, const std::filesystem::path &docPath) {
