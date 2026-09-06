@@ -49,7 +49,7 @@ void FileChooser::show(std::shared_ptr<Container> parent) {
             onCancel();
         }
     });
-    list = std::make_shared<List>(window);
+    list = std::make_shared<List>(window->getContent());
     list->setDimensionsPct(100,100);
     list->centerInParent();
     list->setCallback([this] (int data) {
