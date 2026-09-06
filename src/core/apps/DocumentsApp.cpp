@@ -150,7 +150,7 @@ void DocumentsApp::createDocumentTab(const std::filesystem::path &docPath) {
     tab->path = docPath;
     tab->page = tabs->addTab(tabs, name);
     tab->window = std::make_shared<Window>(tab->page, name);
-    tab->window->setDimensions(100, 100);
+    tab->window->setDimensionsPct(100, 100);
 
     tab->pixMap = std::make_shared<PixMap>(tab->window);
     tab->rasterImage = std::make_shared<img::Image>(tab->window->getContentWidth(), tab->window->getContentHeight(), img::COLOR_TRANSPARENT);
@@ -386,7 +386,7 @@ void DocumentsApp::showAppSettings() {
     auto ui = getUIContainer();
 
     settingsContainer = std::make_shared<Container>();
-    settingsContainer->setDimensions(ui->getWidth() / 8, ui->getHeight() / 2);
+    settingsContainer->setSizeByContent();
     settingsContainer->centerInParent();
     // FIXME settingsContainer->setFit(Container::Fit::TIGHT, Container::Fit::TIGHT);
     settingsContainer->setVisible(false);
