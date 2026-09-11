@@ -48,7 +48,7 @@ void ContainerWithClickableCustomList::show(std::shared_ptr<Container> parent) {
         }
     });
     window->setCaption(windowTitle);
-    list = std::make_shared<List>(window);
+    list = window->addContent(std::make_shared<List>(window));
     list->setDimensions(window->getContentWidth(), window->getContentHeight());
     list->centerInParent();
     list->setCallback([this](int index) {

@@ -52,9 +52,9 @@ MapApp::MapApp(FuncsPtr funcs):
     window->addSymbol(Widget::Symbol::LIST, std::bind(&MapApp::onSettingsButton, this));
     window->setOnClose([this] () { exit(); });
 
-    mapImage = std::make_shared<img::Image>(window->getContent()->getWidth(), window->getContent()->getHeight(), img::COLOR_TRANSPARENT);
+    mapImage = std::make_shared<img::Image>(window->getContentWidth(), window->getContentHeight(), img::COLOR_TRANSPARENT);
 
-    mapWidget = std::make_shared<PixMap>(window->getContent());
+    mapWidget = window->addContent(std::make_shared<PixMap>(window));
     mapWidget->setClickable(true);
     mapWidget->setClickHandler([this] (int x, int y, bool pr, bool rel) { onMapPan(x, y, pr, rel); });
 
@@ -77,7 +77,7 @@ MapApp::MapApp(FuncsPtr funcs):
 void MapApp::createSettingsLayout() {
     auto ui = getUIContainer();
 
-    settingsContainer = std::make_shared<Container>(window->getContent());
+    settingsContainer = window->addContent(std::make_shared<Container>(window));
     settingsContainer->setSizeByContent();
     settingsContainer->centerInParent();
     settingsContainer->setVisible(false);
@@ -505,7 +505,7 @@ void MapApp::onOverlaysButton() {
 void MapApp::showOverlaySettings() {
     auto ui = getUIContainer();
 
-    overlaysContainer = std::make_shared<Container>(window->getContent());
+    overlaysContainer = window->addContent(std::make_shared<Container>(window));
     overlaysContainer->setSizeByContent();
     overlaysContainer->alignTopRightInParent();
     overlaysContainer->setVisible(true);
@@ -726,7 +726,7 @@ void MapApp::startCalibration() {
     });
     messageBox->centerInParent();
 
-    coordsField = std::make_shared<TextArea>(window, "");
+    coordsField = window->addContent(std::make_shared<TextArea>(window, ""));
     coordsField->setDimensions(window->getContentWidth(), 40);
     coordsField->alignInTopLeft();
 

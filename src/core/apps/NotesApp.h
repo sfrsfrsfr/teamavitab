@@ -37,7 +37,6 @@ private:
     std::string text;
 
     std::shared_ptr<Window> window;
-    std::shared_ptr<Container> windowContent;
     std::shared_ptr<TextArea> textArea;
     std::shared_ptr<Keyboard> keys;
     std::shared_ptr<PixMap> scratchPad;

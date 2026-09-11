@@ -38,10 +38,6 @@ void Window::setCaption(const std::string& title) {
     lv_label_set_text(caption, title.c_str());
 }
 
-void Window::add(WidgetPtr content) {
-    content->setParent(contentArea);
-}
-
 std::shared_ptr<Container> Window::getContent() {
     return contentArea;
 }
@@ -62,12 +58,12 @@ void Window::getHeaderArea(int &x1, int &y1, int &x2, int &y2) {
 
 int Window::getContentWidth() {
     lv_obj_update_layout(obj());
-    return lv_obj_get_content_width(obj());
+    return lv_obj_get_width(contentArea->obj());
 }
 
 int Window::getContentHeight() {
     lv_obj_update_layout(obj());
-    return lv_obj_get_content_height(obj());
+    return lv_obj_get_height(contentArea->obj());
 }
 
 void Window::setOnClose(WindowCallback cb) {

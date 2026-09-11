@@ -27,9 +27,8 @@ NotesApp::NotesApp(FuncsPtr appFuncs):
 {
     window->setPadding();
     window->setDimensionsPct(100, 100);
-    windowContent = window->getContent();
-    windowContent->setPadding();
-    image.resize(windowContent->getWidth(), windowContent->getHeight(), img::COLOR_WHITE);
+    window->getContent()->setPadding();
+    image.resize(window->getContentWidth(), window->getContentHeight(), img::COLOR_WHITE);
 
     keyboardButton = window->addSymbol(Widget::Symbol::KEYBOARD, [this] () {
         mode = (mode + 1) % 3;
@@ -65,7 +64,7 @@ void NotesApp::createLayout() {
 
     switch (mode) {
     case 0:
-        scratchPad = std::make_shared<PixMap>(windowContent);
+        scratchPad = window->addContent(std::make_shared<PixMap>(window));
         scratchPad->draw(image);
         scratchPad->setClickable(true);
         scratchPad->setClickHandler([this] (int x, int y, bool start, bool stop) {
@@ -73,15 +72,15 @@ void NotesApp::createLayout() {
         });
         break;
     case 1:
-        textArea = std::make_shared<TextArea>(windowContent, text);
+        textArea = window->addContent(std::make_shared<TextArea>(window, text));
         textArea->setWidthPct(100);
-        keys = std::make_shared<Keyboard>(windowContent, textArea);
+        keys = window->addContent(std::make_shared<Keyboard>(window, textArea));
         keys->setOnCancel([this] {
             textArea->setText("");
         });
         break;
     case 2:
-        textArea = std::make_shared<TextArea>(windowContent, text);
+        textArea = window->addContent(std::make_shared<TextArea>(window, text));
         textArea->setWidthPct(100);
         break;
     }

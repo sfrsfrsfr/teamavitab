@@ -61,12 +61,11 @@ void DocumentsApp::createBrowseTab() {
     browsePage->setPadding();
     browseWindow = std::make_shared<Window>(browsePage, appTitle);
     browseWindow->setDimensionsPct(100, 100);
-    browseWindowContent = browseWindow->getContent();
 
     browseWindow->addSymbol(Widget::Symbol::UP, [this] () { onUp(); });
     browseWindow->addSymbol(Widget::Symbol::DOWN, [this] () { onDown(); });
     browseWindow->setOnClose([this] { exit(); });
-    list = std::make_shared<List>(browseWindowContent);
+    list = browseWindow->addContent(std::make_shared<List>(browseWindow));
     list->setDimensionsPct(100, 100);
     list->setCallback([this] (int data) {
         api().executeLater([this, data] {
@@ -154,7 +153,7 @@ void DocumentsApp::createDocumentTab(const std::filesystem::path &docPath) {
     tab->window = std::make_shared<Window>(tab->page, name);
     tab->window->setDimensionsPct(100, 100);
 
-    tab->pixMap = std::make_shared<PixMap>(tab->window->getContent());
+    tab->pixMap = tab->window->addContent(std::make_shared<PixMap>(tab->window));
     tab->rasterImage = std::make_shared<img::Image>(tab->window->getContentWidth(), tab->window->getContentHeight(), img::COLOR_TRANSPARENT);
     tab->pixMap->setClickable(true);
     tab->pixMap->setClickHandler([this] (int x, int y, bool pr, bool rel) { onPan(x, y, pr, rel); });

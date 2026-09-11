@@ -23,7 +23,7 @@ namespace avitab {
 About::About(FuncsPtr appFuncs):
     App(appFuncs),
     window(std::make_shared<Window>(getUIContainer(), "About AviTab")),
-    label(std::make_shared<Label>(window->getContent(), ""))
+    label(window->addContent(std::make_shared<Label>(window, "")))
 {
     window->setDimensionsPct(100, 100);
     window->setOnClose([this] () { exit(); });

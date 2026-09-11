@@ -58,7 +58,6 @@ private:
 
     std::shared_ptr<Page> browsePage;
     std::shared_ptr<Window> browseWindow;
-    std::shared_ptr<Container> browseWindowContent;
     std::shared_ptr<List> list;
     std::unique_ptr<FilesystemBrowser> fsBrowser;
     std::vector<platform::DirEntry> currentEntries;

@@ -32,7 +32,11 @@ public:
 
     Window(WidgetPtr parent, const std::string &title, const int height = LV_SIZE_CONTENT);
     void setCaption(const std::string &title);
-    void add(WidgetPtr content);
+    template<typename T>
+    std::shared_ptr<T> addContent(std::shared_ptr<T> content) {
+        content->setParent(contentArea);
+        return content;
+    }
     std::shared_ptr<Container> getContent();
     void setOnClose(WindowCallback cb);
     void hideScrollbars();

@@ -46,18 +46,17 @@ void AirportApp::resetLayout() {
     searchPage->setPadding();
     searchWindow = std::make_shared<Window>(searchPage, "");
     searchWindow->setDimensionsPct(100, 100);
-    searchWindowContent = searchWindow->getContent();
 
     searchWindow->addSymbol(Widget::Symbol::SETTINGS, std::bind(&AirportApp::toggleSettings, this));
     searchWindow->setOnClose([this] { prefContainer->setVisible(false); exit(); });
 
-    searchField = std::make_shared<TextArea>(searchWindowContent, "", 10, false);
+    searchField = searchWindow->addContent(std::make_shared<TextArea>(searchWindow, "", 10, false));
     searchField->setPlaceholderText("Search...");
 
-    searchLabel = std::make_shared<Label>(searchWindowContent, "Enter a keyword or ICAO code");
+    searchLabel = searchWindow->addContent(std::make_shared<Label>(searchWindow, "Enter a keyword or ICAO code"));
     searchLabel->alignBelow(searchField);
 
-    nearestButton = std::make_shared<Button>(searchWindowContent, "Nearest");
+    nearestButton = searchWindow->addContent(std::make_shared<Button>(searchWindow, "Nearest"));
     nearestButton->alignRightOf(searchField, 80);
     nearestButton->setCallback([this] (const Button &) {
         auto world = api().getNavDatabase();
@@ -68,7 +67,7 @@ void AirportApp::resetLayout() {
         };
     });
 
-    keys = std::make_shared<Keyboard>(searchWindowContent, searchField);
+    keys = searchWindow->addContent(std::make_shared<Keyboard>(searchWindow, searchField));
     keys->hideEnterKey();
     keys->setOnCancel([this] { clearSearch(); });
     keys->setOnOk([this] {
@@ -108,7 +107,7 @@ void AirportApp::onSearchEntered(const std::string& code) {
         resultStrings.push_back(ap->getDisplayID() + " - " + ap->getName());
     }
 
-    resultList = std::make_shared<DropDownList>(searchWindowContent, resultStrings);
+    resultList = searchWindow->addContent(std::make_shared<DropDownList>(searchWindow, resultStrings));
     resultList->setWidthPct(25);
     resultList->alignBelow(searchLabel);
 
